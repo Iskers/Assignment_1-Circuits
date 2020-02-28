@@ -1,0 +1,18 @@
+circuit	Too many pumps circuit
+tank	S
+pipe	P1	5.00	0.10	0.00
+pump	MP1	0.80
+pipe	P2	2.00	0.10	0.00
+valve	V	1.00
+pipe	P2	2.00	0.10	0.00
+pump	MP2	0.80
+pipe	P3	2.00	0.10	0.00
+filter	F	1.00
+pipe	P4	2.00	0.10	0.00
+bend	B1	0.10
+pipe	P5	4.00	0.10	90.00
+bend	B2	0.10
+pipe	P6	2.00	0.10	0.00
+bend	B3	0.10
+tank	T
+end

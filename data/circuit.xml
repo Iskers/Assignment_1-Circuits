@@ -1,0 +1,16 @@
+<circuit name="Circuit2">
+  <tank name="S"/>
+  <pipe angle="0.0" diameter="0.1" length="5.0" name="P1"/>
+  <pump efficiency="0.8" name="MP"/>
+  <pipe angle="0.0" diameter="0.1" length="2.0" name="P2"/>
+  <valve name="V" opening="1.0"/>
+  <pipe angle="0.0" diameter="0.1" length="2.0" name="P3"/>
+  <filter cleanliness="1.0" name="F"/>
+  <pipe angle="0.0" diameter="0.1" length="2.0" name="P4"/>
+  <bend diameter="0.1" name="B1"/>
+  <pipe angle="90.0" diameter="0.1" length="4.0" name="P5"/>
+  <bend diameter="0.1" name="B2"/>
+  <pipe angle="0.0" diameter="0.1" length="2.0" name="P6"/>
+  <bend diameter="0.1" name="B3"/>
+  <tank name="T"/>
+</circuit>
