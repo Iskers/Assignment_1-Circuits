@@ -1,4 +1,4 @@
-from __future__ import annotations
+# from __future__ import annotations
 import copy
 
 from .parts import *
@@ -23,7 +23,7 @@ class Circuit:
         self._name = ""
         self._validness = True
 
-        # Circuit spesifics
+        # Circuit specifics
         self._canvas: list = []
         self._inside_diameter: float = 0.0
         self._height = None
@@ -34,7 +34,7 @@ class Circuit:
     def __str__(self):
         return self.name
 
-    # Enter exit used in conteksts where you want to alter a circuit, but revert back when finished
+    # Enter exit used in context where you want to alter a circuit, but revert back when finished
     def __enter__(self):
         self._name_backup = self.name
         self._validness_backup = self._validness
