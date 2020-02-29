@@ -196,7 +196,7 @@ class Pump(Part):
 
 
 class Filter(Part):
-    def __init__(self, name: str, cleanliness: bool):
+    def __init__(self, name: str, cleanliness: bool, **extra_kwarg):
         self._name = name
         self._cleanliness = cleanliness
         self.ZETA = self._get_ZETA_from_cleanliness(cleanliness)
@@ -221,7 +221,7 @@ class Filter(Part):
 
     @classmethod
     def initialize_with_kwargs(cls, **kwargs):
-        return cls(name=kwargs["name"], cleanliness=bool(kwargs["cleanliness"]))
+        return cls(**kwargs)
 
     @staticmethod
     def _get_ZETA_from_cleanliness(openness: bool) -> float:
