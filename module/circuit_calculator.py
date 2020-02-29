@@ -67,8 +67,8 @@ class CircuitFormulas:
         return (math.pi * diameter ** 2) / 4
 
     @staticmethod
-    def calculate_delta_height(height: float, gravitaitonal_constant: float, density_of_medium: float) -> float:
-        return height * gravitaitonal_constant * density_of_medium
+    def calculate_delta_height(height: float, gravitational_constant: float, density_of_medium: float) -> float:
+        return height * gravitational_constant * density_of_medium
 
     # Legacy (Not in use other than testing)
     @staticmethod

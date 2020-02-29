@@ -43,7 +43,7 @@ class Part:
         return object_created
 
     def calculate_losses_of_pressure(self, density_of_medium: int, velocity_of_medium: int, flow_coefficient: float):
-        """Default calculation of losses of pressure, to be overritten by funtions with special cases.
+        """Default calculation of losses of pressure, to be overwritten by functions with special cases.
 
         :param density_of_medium: Density of the medium where pressure is calculated.
         :param velocity_of_medium: Velocity of the medium where pressure is calculated.
