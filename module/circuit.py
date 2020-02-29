@@ -95,7 +95,7 @@ class Circuit:
         self._height = height
         return self._height
 
-    # TODO create hight setter?
+    # TODO create height setter?
 
     @property
     def filter_count(self):
