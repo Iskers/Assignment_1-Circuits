@@ -1,12 +1,9 @@
-# noinspection PyUnboundLocalVariable
-#if __name__ == "__main__" and __package__ is None:
-#    __package__ = "package.tests"
-
 import unittest
 from module import circuit as cir
 
 
 class CircuitClassTester(unittest.TestCase):
+
     # TODO move example_circuit here ?
     def setUp(self) -> None:
         pass
@@ -70,14 +67,8 @@ class CircuitClassTester(unittest.TestCase):
 
     def test_add_part(self):
         circuit = cir.Circuit()
-        # pipe str format [type, name, lenght, inside_diameter, angle]
         part_pipe_list_str = ["pipe", "Pipe_name_tester", "6", "0.1", "0"]
         circuit.add_part_from_string(part_pipe_list_str)
         self.assertIsInstance(circuit[0], cir.PipeStraight)
 
     # TODO Add testers for more parts
-
-
-#if __name__ == '__main__':
-    #unittest.main()
-    #pass

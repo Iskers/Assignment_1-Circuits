@@ -14,7 +14,7 @@ class CircuitCalculatorTester(unittest.TestCase):
         self.calculator = calc.CircuitCalculator()
         self.circuit_default_example = self.parser.pars("circuit.tsv", format_="tsv", true_path=False)
 
-    def test_maincase_calculation(self):
+    def test_main_case_calculation(self):
         self.calculator.calculate_actual_energy_for_circuit(self.circuit_default_example)
 
     def test_formulas_existence(self):

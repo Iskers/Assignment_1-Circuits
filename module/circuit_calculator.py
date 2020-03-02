@@ -44,7 +44,7 @@ class CircuitFormulas:
     # TODO Remove method, Legacy method
     @staticmethod
     def calculate_losses_of_pressure(**kwargs):
-        # ans = None
+        ans = None
         try:
             ans = CircuitFormulas.calculate_losses_of_pressure_in_pipe(kwargs["flow_coefficient"],
                                                                        kwargs["inside_diameter"],

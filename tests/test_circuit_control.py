@@ -6,7 +6,7 @@ import module.parsers as pars
 
 class CircuitControlTester(unittest.TestCase):
     """
-    Uses the invalid and valid circuits in data to show that errors are correcly thrown.
+    Uses the invalid and valid circuits in data to show that errors are correctly thrown.
     """
     # UTILITIES
     def setUp(self) -> None:
