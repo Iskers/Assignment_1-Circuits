@@ -59,14 +59,14 @@ Core Modules
 ------------
 Most big functionality, which is not private should be documented in their docstrings.
 
-General class setup
+General conventions
 ~~~~~~~~~~~~~~~~~~~
 
 Most classes are initialized with a init function. This takes in arguments and initializes a object, assigning
 member variables with their given value. Private member variables are named with the following convention
 ``_variable_name``, public variables are named without the leading underscore ``variable_name``.
 
-Classes in this project use properties `<https://docs.python.org/3/library/functions.html?highlight=property#property>`_
+Classes in this project use `properties <https://docs.python.org/3/library/functions.html?highlight=property#property>`_
 as opposed to setter and getter functions. Properties function as setter and getter functions, but are accessed with
 ``some_object.property_name`` in the same way manipulating private member variables without accessing them directly.
 
@@ -170,6 +170,12 @@ If you are having issues, please let us know.
 
 We have a mailing list located at: project@google-groups.com
 
+Some afterthoughts
+~~~~~~~~~~~~~~~~~~
+I should have decided on some conventions in the start of the project and kept to them. Refactoring and changing
+conventions midway was very time consuming and with
+
+Consistency is key. After learning about new
 
 
 :Author:
