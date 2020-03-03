@@ -82,15 +82,21 @@ class Circuit:
 
     @property
     def height(self):
-        height = 0
-        for part in self.canvas:
-            if isinstance(part, PipeStraight):
-                if part.angle > 0:
-                    height += part.length
-        self._height = height
+        if self._height is None:
+            height = 0
+            for part in self.canvas:
+                if isinstance(part, PipeStraight):
+                    if part.angle > 0:
+                        height += part.length
+            self._height = height
         return self._height
 
-    # TODO create height setter?
+    @height.setter
+    def height(self, value):
+        if value is None:
+            self._height = None
+        else:
+            raise Exception(f"You are not allowed to directly change the circuit height.")
 
     @property
     def filter_count(self):
@@ -183,8 +189,9 @@ class Circuit:
         self.valve_count += 1
         return valve
 
+    # TODO Remove
     # Legacy Not in use
-    def add_part_nested(self, line): # pragma: no cover
+    def add_part_nested(self, line):  # pragma: no cover
         current_angle = 0
         horizontalness = True
 

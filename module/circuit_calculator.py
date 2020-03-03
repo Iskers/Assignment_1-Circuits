@@ -66,10 +66,6 @@ class CircuitFormulas:
     def calculate_area(diameter: float) -> float:
         return (math.pi * diameter ** 2) / 4
 
-    @staticmethod
-    def calculate_delta_height(height: float, gravitational_constant: float, density_of_medium: float) -> float:
-        return height * gravitational_constant * density_of_medium
-
     # Legacy (Not in use other than testing)
     @staticmethod
     def calculate_zeta_bend() -> float:
@@ -120,7 +116,7 @@ class CircuitCalculator:
                                                                           , self.KINEMATIC_VISCOSITY_OF_SEAWATER)
         flow_coefficient = self.circuit_formulas.calculate_flow_coefficient(reynolds_number)
         flow_of_seawater = self.circuit_formulas.calculate_flow(area, self._velocity_of_medium)
-        pressure_losses_from_height = self.circuit_formulas.calculate_delta_height(circuit.height
+        pressure_losses_from_height = self.circuit_formulas.calculate_pressure_losses_from_height(circuit.height
                                                                                    , self.GRAVITATIONAL_CONSTANT
                                                                                    , self.DENSITY_OF_SEAWATER)
 

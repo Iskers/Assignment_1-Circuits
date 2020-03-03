@@ -31,10 +31,10 @@ class CircuitFormulasTester(unittest.TestCase):
         self.assertEqual(round(calc.CircuitFormulas.calculate_area(diameter), 2), area_with_4_diameter
                          , f"Should be {area_with_4_diameter}")
 
-    def test_calculate_delta_height(self):
+    def test_calculate_pressure_losses_from_height(self):
         height = 10
         delta_height_10m = 100552.5
-        self.assertEqual(round(calc.CircuitFormulas.calculate_delta_height(height, 9.81, 1025), 2), delta_height_10m
+        self.assertEqual(round(calc.CircuitFormulas.calculate_pressure_losses_from_height(height, 9.81, 1025), 2), delta_height_10m
                          , f"Should be {delta_height_10m}")
 
     def test_ZETA_for_parts_and_changing_some_values(self):

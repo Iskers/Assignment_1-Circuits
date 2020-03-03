@@ -29,15 +29,15 @@ class Study:
     def _stepper_range(self, circuit, type_, start: float, stop: float, step: int):
         energy_consumptions = []
         list_ = np.linspace(start, stop, step)
-        with circuit as circuit:
+        with circuit as test_circuit:
             if type_ == "height":
                 for i in range(len(list_)):
-                    self._canvas_height_adapt(circuit, list_[i])
-                    self._append_energy_consumption(circuit, energy_consumptions)
+                    self._canvas_height_adapt(test_circuit, list_[i])
+                    self._append_energy_consumption(test_circuit, energy_consumptions)
             else:
                 for i in range(len(list_)):
-                    setattr(circuit, type_, list_[i])
-                    self._append_energy_consumption(circuit, energy_consumptions)
+                    setattr(test_circuit, type_, list_[i])
+                    self._append_energy_consumption(test_circuit, energy_consumptions)
         return energy_consumptions
 
     def _stepper_bool(self, circuit: cir.Circuit, type_) -> list:
@@ -75,8 +75,8 @@ class Study:
         """
         if height == 0.0 and circuit.height > 0.0:
             raise Exception(f"Removing height from a circuit with height not allowed as this"
-                            f" fundamenlaly changes the circut. This requires removing all bends and content between. "
-                            f"Height of circuit is {circuit.height}")
+                            f" fundamentally changes the circuit. This requires removing all bends and content between."
+                            f" Height of circuit is {circuit.height}")
 
         delta = circuit.height - height
         delta = abs(delta)
@@ -90,12 +90,14 @@ class Study:
                             delta -= length_allowed_to_remove
                         else:
                             part.length -= delta
+                            circuit.height = None
                             return circuit.height
             raise Exception(f"Not allowed to remove {height} from {circuit}")
 
         elif circuit.height < height:
             pipe = cir.PipeStraight("Added_pipe", circuit.inside_diameter, delta, 90)
             self._add_parts_to_canvas(circuit, pipe)
+            circuit.height = None
             return circuit.height
 
     # TODO expand for more parts
