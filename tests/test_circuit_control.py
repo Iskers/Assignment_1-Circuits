@@ -20,7 +20,7 @@ class CircuitControlTester(unittest.TestCase):
         self.controller = None
 
     def tsv_standard(self, file_name: str) -> cir.Circuit:
-        return self.parser.pars(file_name, format_="tsv", true_path=False)
+        return self.parser.parse(file_name, format_="tsv", true_path=False)
 
     def faulty_circuits_control(self, circuit: cir.Circuit):
         try:
@@ -35,11 +35,11 @@ class CircuitControlTester(unittest.TestCase):
 
     # ACTUAL TSV TESTS
     # First alternative with lambda function
-    def test_tsv_invalid_circuit1_with_lamdbda_method(self):
+    def test_tsp_invalid_circuit1_with_lambda_method(self):
         self.circuit = self.tsv_standard("invalid_circuit1.tsv")
         self.assertRaises(Exception, lambda: self.controller.control_circuit(self.circuit))
 
-    # Second alternative with context mananger
+    # Second alternative with context manager
     def test_tsc_invalid_circuit2_with_context_manager(self):
         self.circuit = self.tsv_standard("invalid_circuit2.tsv")
         with self.assertRaises(Exception) as excep:

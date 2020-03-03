@@ -1,5 +1,5 @@
 from unittest import TestCase
-import module.page_gen as pgen
+import module.page_generator as pgen
 import module.path_finder as pf
 import module.file_handler as fh
 import module.study_ as stdy

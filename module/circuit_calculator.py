@@ -95,7 +95,7 @@ class CircuitCalculator:
     circuit_formulas = CircuitFormulas()
 
     # Constants
-    DENCITY_OF_SEAWATER = 1025  # [kg/m^3]
+    DENSITY_OF_SEAWATER = 1025  # [kg/m^3]
     GRAVITATIONAL_CONSTANT = 9.81  # [m/s^2]
     KINEMATIC_VISCOSITY_OF_SEAWATER = 1.35 * 10 ** (-6)  # [m/s^2]
 
@@ -108,7 +108,7 @@ class CircuitCalculator:
     def calculate_losses_from_frictions(self, circuit: cir.Circuit, flow_coefficient):
         pressure_losses_from_frictions = 0
         for part in circuit:
-            pressure_losses_from_frictions += part.calculate_losses_of_pressure(self.DENCITY_OF_SEAWATER
+            pressure_losses_from_frictions += part.calculate_losses_of_pressure(self.DENSITY_OF_SEAWATER
                                                                                 , self._velocity_of_medium
                                                                                 , flow_coefficient)
         return pressure_losses_from_frictions
@@ -122,7 +122,7 @@ class CircuitCalculator:
         flow_of_seawater = self.circuit_formulas.calculate_flow(area, self._velocity_of_medium)
         pressure_losses_from_height = self.circuit_formulas.calculate_delta_height(circuit.height
                                                                                    , self.GRAVITATIONAL_CONSTANT
-                                                                                   , self.DENCITY_OF_SEAWATER)
+                                                                                   , self.DENSITY_OF_SEAWATER)
 
         pressure_losses_from_frictions = self.calculate_losses_from_frictions(circuit, flow_coefficient)
 

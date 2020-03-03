@@ -19,7 +19,7 @@ class ParserClassTester(unittest.TestCase):
     """
     Uses unittest to tests all member functions of the class Parser Class.
     setUp() initializes each tests function instance, and tearDown() is called as a
-    destructer after the tests function is run.
+    destructor after the tests function is run.
     In this way each tests has a fresh parser and circuit.
     """
     def setUp(self) -> None:
@@ -38,7 +38,7 @@ class ParserClassTester(unittest.TestCase):
     '''
 
     def test_xml(self):
-        circuit = self.parser.pars(file_name="circuit.xml", true_path=False, format_="xml")
+        circuit = self.parser.parse(file_name="circuit.xml", true_path=False, format_="xml")
         pass
 
 

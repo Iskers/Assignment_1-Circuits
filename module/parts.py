@@ -7,7 +7,6 @@ from pytypes import typechecked
 class Part:
     """
     Part is a abstract class for the parts in a circuit.
-    \n
 
     Part list: Tank, PipeStraight, PipeBend, Pump, Valve, Filter
     """
@@ -27,18 +26,18 @@ class Part:
         return globals()[parts_dict[kwargs["type_"]]].initialize_with_kwargs(**kwargs)
 
     @classmethod
-    def part_from_string(cls, object_name, *args):
-        """ Main method for creating classes from strings in a file. Redirects too each class initialize from string
+    def part_from_string(cls, *args):
+        """
+        Main method for creating classes from strings in a file. Redirects too each class initialize from string
         function.
 
-        :param str object_name: Name of class of type Part in lowercase
         :param args: Required class arguments
         :return: Object of class_name type
         :rtype: object
         """
         parts_dict = {"tank": "Tank", "pipe": "PipeStraight", "bend": "PipeBend", "pump": "Pump",
                       "filter": "Filter", "valve": "Valve"}
-        object_name = parts_dict[object_name]
+        object_name = parts_dict[args[0][0]]
         object_created = globals()[object_name].initialize_with_args(*args)
         return object_created
 
@@ -82,7 +81,12 @@ class Tank(Part):
 
 
 class Pipe(Part):
-    _angle: int
+    """
+    Abstract class for pipes. Should not be initialized.
+
+    :param str name: Name of part
+    :param float inside_diameter: Inside diameter of pipe
+    """
 
     def __init__(self, name: str, inside_diameter: float):
         self._name = name
@@ -173,15 +177,6 @@ class Pump(Part):
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name}, efficiency={self.efficiency})"
 
-    @classmethod
-    def initialize_with_args(cls, *args):
-        pipe = cls(args[0][1], float(args[0][2]))
-        return pipe
-
-    @classmethod
-    def initialize_with_kwargs(cls, **kwargs):
-        return cls(name=kwargs["name"], efficiency=float(kwargs["efficiency"]))
-
     @property
     def efficiency(self):
         return self._efficiency
@@ -190,6 +185,15 @@ class Pump(Part):
     @efficiency.setter
     def efficiency(self, value: float):
         self._efficiency = value
+
+    @classmethod
+    def initialize_with_args(cls, *args):
+        pipe = cls(args[0][1], float(args[0][2]))
+        return pipe
+
+    @classmethod
+    def initialize_with_kwargs(cls, **kwargs):
+        return cls(name=kwargs["name"], efficiency=float(kwargs["efficiency"]))
 
     def calculate_losses_of_pressure(self, *args):
         return 0

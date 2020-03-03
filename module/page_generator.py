@@ -42,12 +42,12 @@ class HTMLContext(HTMLSerializer):
         self._tag = tag
         self._line = ""
 
-    # OVELOADS
+    # OVERLOADS
     def __iadd__(self, other):
         self.line += other
         return self
 
-    # CONTEXT DEFINITON
+    # CONTEXT DEFINITION
     def __enter__(self):
         self.line += self._serialize_open_tag(self.tag)
         self.depth += 1
@@ -154,6 +154,7 @@ class PageGenerator:
         with fh.File(target_file, "w") as target:
             pass
 
+    # TODO remove
     @staticmethod
     def render_page(template_loc, file_name, **kwargs):
         return jinja.Environment(loader=jinja.FileSystemLoader(template_loc)). \

@@ -38,7 +38,7 @@ parameters as one want. For analysis of existing circuits import files into the 
 
 .. code:: bash
 
-    $ python3 main.py
+    $ python main.py
 
 
 Pumping Circuits
@@ -59,13 +59,29 @@ Core Modules
 ------------
 Most big functionality, which is not private should be documented in their docstrings.
 
+General class setup
+~~~~~~~~~~~~~~~~~~~
+
+Most classes are initialized with a init function. This takes in arguments and initializes a object, assigning
+member variables with their given value. Private member variables are named with the following convention
+``_variable_name``, public variables are named without the leading underscore ``variable_name``.
+
 Classes in this project use properties `<https://docs.python.org/3/library/functions.html?highlight=property#property>`_
 as opposed to setter and getter functions. Properties function as setter and getter functions, but are accessed with
 ``some_object.property_name`` in the same way manipulating private member variables without accessing them directly.
 
+Some classes have representations defined using the magic methods ``__repr__`` or ``__str__``. These are mostly used
+for printing classes, but are also useful in debugging.
+
+The classes Circuit and FileHandler can be used as
+`context managers <https://docs.python.org/3/reference/datamodel.html#context-managers>`_ in which a certain context is
+created when using the with statement. See the docstrings for the __enter__ methods explain their uses.
+
+
+
 parts.py
 ~~~~~~~~
-This module contains the parts of the circuit. The class ``Part`` is abstract class for all other parts used. It
+This module contains the parts of the circuit. The ``class Part`` is abstract class for all other parts used. It
 contains a name which is a property shared by all parts, used with ``Part.name``.
 
 It also contains two different
@@ -126,8 +142,8 @@ which dont share inheritance seemed like a useful standard.
 
 .. Compared to many other projects this project is modularized in quite a degree.
 
-Documentation and annotations
------------------------------
+Documentation, docstrings and annotations
+------------------------------------------
 
 In an attempt to develop this project in a more realistic manner, close to a real world open-source project I have
 tried to use the conventions of creating a README and use `docstrings <https://www.python.org/dev/peps/pep-0257/>`_

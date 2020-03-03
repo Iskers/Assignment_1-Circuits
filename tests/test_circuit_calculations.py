@@ -12,7 +12,7 @@ class CircuitCalculatorTester(unittest.TestCase):
     def setUp(self) -> None:
         self.parser = par.Parser()
         self.calculator = calc.CircuitCalculator()
-        self.circuit_default_example = self.parser.pars("circuit.tsv", format_="tsv", true_path=False)
+        self.circuit_default_example = self.parser.parse("circuit.tsv", format_="tsv", true_path=False)
 
     def test_main_case_calculation(self):
         self.calculator.calculate_actual_energy_for_circuit(self.circuit_default_example)
@@ -61,7 +61,7 @@ class CircuitFormulasTester(unittest.TestCase):
     # TODO finish tests
     def est_calculate_losses_of_pressure(self):
         calculator = calc.CircuitCalculator()
-        calc.CircuitFormulas.calculate_losses_of_pressure(density_of_medium=calculator.DENCITY_OF_SEAWATER)
+        calc.CircuitFormulas.calculate_losses_of_pressure(density_of_medium=calculator.DENSITY_OF_SEAWATER)
         pass
 
     def test_calculate_flow_coefficient(self):
