@@ -35,7 +35,7 @@ some change
 Usage
 ~~~~~
 This script comes with a main.py file which is the base for running the deployed system. From here one can set parameters as one want.
-For analisys of existing circuits import files into the data folder and load them.
+For analysis of existing circuits import files into the data folder and load them.
 
 .. code:: bash
 
@@ -78,6 +78,20 @@ As this python script is composed of several modules and data sets it is departm
 Reviewing the project structure, it is composed of the folders data, tests and module, as well as a top facing main function.
 Basing the project such provides a clear overview and modularize's the project into easy accessible files without overwhelming the user.
 
+
+
+Modularisation
+--------------
+
+Compared to many other projects this project is modularized in quite a degree. This is an attempt to create files which can be copied and pasted to
+new projects when needed. For example file_handler.py and
+
+.. literalinclude:: module.file_handler.py
+    :linenos:
+    :language: python
+    :lines: 1, 3-5
+    :start-after: 3
+    :end-before: 5
 
 
 Contribute
