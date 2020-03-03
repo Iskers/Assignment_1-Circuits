@@ -157,21 +157,9 @@ Discovering these conventions during development has led to some inconsistencies
     :end-line: 10
 
 
-Contribute
-----------
 
-- Issue Tracker: github.com/$project/$project/issues
-- Source Code: github.com/$project/$project
-
-Support
--------
-
-If you are having issues, please let us know.
-
-We have a mailing list located at: project@google-groups.com
-
-Some afterthoughts
-~~~~~~~~~~~~~~~~~~
+Afterthoughts
+~~~~~~~~~~~~~
 I should have decided on some conventions in the start of the project and kept to them. Refactoring and changing
 conventions midway was very time consuming and with
 
