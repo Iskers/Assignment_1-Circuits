@@ -1,4 +1,4 @@
-circuit	Misplaced_Filter circuit
+circuit	Misplaced_Filter
 tank	S
 pipe	P1	5.00	0.10	0.00
 filter	Misplaced_Filter	1.00

@@ -1,4 +1,4 @@
-circuit	Wrong pipe after pump circuit
+circuit	Wrong pipe after pump
 tank	S
 pipe	P1	5.00	0.10	0.00
 pump	MP	0.80

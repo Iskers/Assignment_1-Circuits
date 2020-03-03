@@ -1,4 +1,3 @@
-# from __future__ import annotations
 import copy
 
 from .parts import *
@@ -7,15 +6,10 @@ import sys
 
 class Circuit:
     """
-    \n Rule list:
-    1. The circuit must start and end with a tank. These two tanks must be the only ones of the circuit. \n
-    2. The second element of the circuit must be a horizontal pipe.\n
-    3. The circuit must contain one and only one pump.\n
-    4. All the pipes and bends of the circuit must have the same inside diameter.\n
-    5. If a pipe follows another pipe, then the two pipes must have the same angle.\n
-    6. Bends make pass from an horizontal pipe to a vertical pipe or vice-versa (except before the target tank).\n
-    7. Pumps and filters must be preceded and followed by horizontal pipes.\n
-    8. Valves must be preceded and followed by pipes with the same angles.
+    :ivar _canvas: List of parts in circuit.
+    :ivar _name: Circuits name.
+    :ivar _inside_diameter: Inside diameter of pipes, must be the same for all pipes.
+    :ivar _efficiency: Efficiency of the pump in the circuit.
     """
 
     def __init__(self):
@@ -32,10 +26,11 @@ class Circuit:
         self._valve_count = 0
 
     def __str__(self):
-        return self.name
+        return "Circuit " + self.name
 
-    # Enter exit used in context where you want to alter a circuit, but revert back when finished
     def __enter__(self):
+        """Enter exit used in context where you want to alter a circuit, but revert back when finished. Used in
+        study_.py"""
         self._name_backup = self.name
         self._validness_backup = self._validness
         self._canvas_backup = copy.deepcopy(self.canvas)
@@ -129,17 +124,13 @@ class Circuit:
                 part.inside_diameter = value
         self._inside_diameter = value
 
-    # TODO remove
-    def _get_efficiency_of_pump(self):
-        for part in self.canvas:
-            if isinstance(part, Pump):
-                return part.efficiency
-
     # TODO create test
     @property
     def efficiency(self):
         if self._efficiency == 0:
-            self._efficiency = self._get_efficiency_of_pump()
+            for part in self.canvas:
+                if isinstance(part, Pump):
+                    self._efficiency = part.efficiency
         return self._efficiency
 
     @efficiency.setter
@@ -155,7 +146,7 @@ class Circuit:
 
     def add_part_from_string(self, line):
         part_creator = Part()
-        self.canvas.append(part_creator.part_from_string(line[0], line))
+        self.canvas.append(part_creator.part_from_string(line))
         return self.canvas
 
     # Main Adding methods

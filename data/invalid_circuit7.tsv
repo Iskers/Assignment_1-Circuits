@@ -1,4 +1,4 @@
-circuit	Invalid pipe angle circuit	6.bendtest
+circuit	Invalid pipe angle	6.bendtest
 tank	S
 pipe	P1	5.00	0.10	0.00
 pump	MP1	0.80

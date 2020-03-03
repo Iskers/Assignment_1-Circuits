@@ -1,4 +1,4 @@
-circuit	Inside diameter fault circuit
+circuit	Inside diameter fault
 tank	S
 pipe	P1	5.00	0.10	0.00
 pump	MP1	0.80
