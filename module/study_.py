@@ -153,7 +153,7 @@ class Study:
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
             self._plot_image_generator(x_values, y_values, f"Increasing {type_}", "Energy consumption", f"Study {type_}"
                                        , file_name)
-        
+
 
     @staticmethod
     def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name):
