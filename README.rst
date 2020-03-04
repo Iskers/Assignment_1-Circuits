@@ -1,8 +1,8 @@
 .. Copyright 2020, Oskar T. Inderberg
 
-******************************
+==============================
 Assignment 1: Pumping Circuits
-******************************
+==============================
 
 Pumping circuits is a program which provides design, troubleshooting and analysis of fluid circuits.
 
@@ -33,7 +33,7 @@ Assumptions
 
 Usage
 -----
-This project comes with a main.py file which is the base for running the deployed system. From here one can set
+This project comes with a *main.py* file which is the base for running the deployed system. From here one can set
 parameters as one want. For analysis of existing circuits import files into the data folder and load them.
 
 .. code:: bash
@@ -55,16 +55,15 @@ This program tries to conform to several "good practises" following the followin
 Because these where applied some time into the development of this program, and the resource cost of
 refactoring one might find parts that do not adhere to these principles.
 
-Core Modules
-------------
 Most big functionality, which is not private should be documented in their docstrings.
 
 General conventions
-~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Most classes are initialized with a init function. This takes in arguments and initializes a object, assigning
 member variables with their given value. Private member variables are named with the following convention
-``_variable_name``, public variables are named without the leading underscore ``variable_name``.
+``_variable_name``, public variables are named without the leading underscore ``variable_name``. Private and public
+member functions also follow this convention.
 
 Classes in this project use `properties <https://docs.python.org/3/library/functions.html?highlight=property#property>`_
 as opposed to setter and getter functions. Properties function as setter and getter functions, but are accessed with
@@ -77,7 +76,13 @@ The classes Circuit and FileHandler can be used as
 `context managers <https://docs.python.org/3/reference/datamodel.html#context-managers>`_ in which a certain context is
 created when using the with statement. See the docstrings for the __enter__ methods explain their uses.
 
+@typechecked a decorator from the package ``pytypes``, which checks that the arguments in functions follow the
+annotations.
 
+Trailing underscores are used when naming conflicts with pythons built in functions.
+
+File specifics
+---------------
 
 parts.py
 ~~~~~~~~
@@ -96,19 +101,57 @@ All sub part classes are structured with the following pattern:
     4. Factory functions
     5. Calculation functions
 
-Representation is used to give a clear picture of how objects look like in circuit. This can be used for printing a
-part object or a circuit canvas.
-
 Factory functions are used by the factory methods to instance new objects which have different arguments than the
 initializer.
 
-Calculation functions are functions used by the class CircuitCalculator.py to calculate losses of pressure or
+Calculation functions are functions used by the class CircuitCalculator to calculate losses of pressure or
 return the objects specific ZETA value. While it would be preferred to contain these functions in the class
 CircuitCalculator it was simpler to add it to the parts for easy iteration.
 
 circuit.py
 ~~~~~~~~~~
+Overall class representing a circuit. Canvas is the most important variable. This contains a chronological list of
+parts. Items in the canvas can be accessed through ``some_circuit[index]``.
 
+Circuit can, as previously mentioned be used in a context where one can alter it and then it reverts back when leaving
+the context. This is useful in *study_.py* because here we want to alter a circuit do some studies and then return
+the original for final alterations.
+
+Some of a circuits properties are independent of the amount of parts in it. Such properties are efficiency and inside
+diameter. They can therefore be defined for the entire circuit. Additionally their setters must alter parts in the
+circuit in order to represent the circuit correctly.
+
+.. todo add section for canvascreator
+
+parser.py
+~~~~~~~~~
+This file contains parser class which can be used for parsing different file types. It should be used by calling
+its member function ``parse`` which uses *file_handler.py* and *path_finder.py* as well as the package ElementTree to
+parse both tsv and xml formats.
+
+circuit_control.py
+~~~~~~~~~~~~~~~~~~
+This file contains the ``CircuitControl`` class which is used to control circuits for faults. It is used by initializing
+a class instance and then called with the function ``control_circuit`` which takes in a circuit and raises an exception
+if a rule is broken. If no rule is broken it returns ``True``.
+
+circuit_calculator.py
+~~~~~~~~~~~~~~~~~~~~~
+This file holds two classes. The first ``CircuitFormulas`` contains all the formulas used for the different calculations
+used on a circuit. The second ``CircuitCalculator`` is the class used for retrieving the different calculations.
+Modularizing the functions in such a way makes it easy to alter functions if needed and the calculator class remains
+readable. One might want to change the function names in ``CircuitFormulas`` to make it more simple and flat.
+
+study\_.py
+~~~~~~~~~~
+This file holds the class ``Study`` which, after initialized, can be called with a study function. A study function
+utilizes the classes private functions to perform some studies on a circuit. A circuit should be designed and controlled
+before using these functions. If one is to create new studies they should be created as public member functions to be
+called from this class.
+
+page_generator.py
+~~~~~~~~~~~~~~~~~
+This file is used for generating HTML reports for studies of circuits.
 
 Testing
 -------
@@ -153,9 +196,9 @@ Discovering these conventions during development has led to some inconsistencies
 
 .. include:: module/file_handler.py
     :code: python
-    :start-line: 1
-    :end-line: 10
-
+    :start-line: 0
+    :end-line: 100
+    :literal:
 
 
 Afterthoughts
