@@ -1,12 +1,5 @@
-
-# noinspection PyUnboundLocalVariable
-if __name__ == "__main__" and __package__ is None:  # pragma: no cover
-    __package__ = "package.tests"
-
-    from ..module import circuit as cc
-    from ..module import parts as pt
-else:
-    from . import circuit as cc, parts as pt
+import module.circuit as cir
+import module.parts as pt
 
 
 class CircuitControl:
@@ -14,7 +7,7 @@ class CircuitControl:
         pass
 
     @staticmethod
-    def control_circuit(circuit: cc.Circuit):
+    def control_circuit(circuit: cir.Circuit):
         """
         Takes in a circuit and returns either an exception or the value True.
 
@@ -40,7 +33,7 @@ class CircuitControl:
                 if tank_count_check > 2:
                     raise Exception(f"{part!r}, too many pumps, there must not be more than two tanks.")
 
-            # Control that the part before the preveous valve has the correct angle
+            # Control that the part before the previous valve has the correct angle
             if valve_check_part is not None:
                 if not isinstance(part, pt.Pipe):
                     raise Exception(f"{part!r}, part before and after {previous_part} must be a pipe and is not.")
@@ -69,7 +62,7 @@ class CircuitControl:
 
             # Control Valves
             elif isinstance(part, pt.Valve):
-                # TODO check if nessesary
+                # TODO check if necessary
                 if valve_check_part is None:
                     if not isinstance(previous_part, pt.Pipe):
                         raise Exception(f"{part!r}, {previous_part} preceding type Valve is not a pipe")

@@ -1,5 +1,6 @@
 from pytypes import typechecked
 import numpy as np
+
 import module.circuit as cir
 import module.circuit_calculator as calc
 

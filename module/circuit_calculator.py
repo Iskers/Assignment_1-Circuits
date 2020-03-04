@@ -129,8 +129,6 @@ class CircuitCalculator:
 
     def calculate_actual_energy_for_circuit(self, circuit: cir.Circuit):
         theoretical_energy = self.calculate_theoretical_energy_for_circuit(circuit)
-        if circuit.efficiency <= 0 or circuit.efficiency > 1:
-            raise Exception(f"efficiency must be between 1 and 0, efficiency is {circuit.efficiency}")
         actual_energy = self.circuit_formulas.calculate_actual_energy(theoretical_energy,
                                                                       circuit.efficiency)
         return actual_energy

@@ -121,7 +121,7 @@ class StudyHTMLSerializer(HTMLSerializer):
         super().__init__()
         self.study = study.Study()
 
-    # CLASS SPESIFIC HTML METHODS
+    # CLASS SPECIFIC HTML METHODS
     def serialize_circuit(self, circuit):
         result = self._serialize_open_tag("")
 
@@ -153,9 +153,3 @@ class PageGenerator:
 
         with fh.File(target_file, "w") as target:
             pass
-
-    # TODO remove
-    @staticmethod
-    def render_page(template_loc, file_name, **kwargs):
-        return jinja.Environment(loader=jinja.FileSystemLoader(template_loc)). \
-            get_template(file_name).render(kwargs)

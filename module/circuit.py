@@ -1,7 +1,6 @@
 import copy
-
-from .parts import *
 import sys
+from .parts import *
 
 
 class Circuit:
@@ -24,6 +23,14 @@ class Circuit:
         self._efficiency = 0
         self._filter_count = 0
         self._valve_count = 0
+
+    def __getitem__(self, item):
+        if isinstance(item, int):
+            return self.canvas[item]
+        elif isinstance(item, Part):
+            return self.canvas.index(item)
+        else:
+            raise Exception("Cant get item")
 
     def __str__(self):
         return "Circuit " + self.name
@@ -53,13 +60,6 @@ class Circuit:
         del self._name_backup, self._validness_backup, self._canvas_backup, self._inside_diameter_backup, \
             self._height_backup, self._efficiency_backup, self._filter_count_backup, self._valve_count_backup
 
-    def __getitem__(self, item):
-        if isinstance(item, int):
-            return self.canvas[item]
-        elif isinstance(item, Part):
-            return self.canvas.index(item)
-        else:
-            raise Exception("Cant get item")
 
     @property
     def name(self):
@@ -130,21 +130,26 @@ class Circuit:
                 part.inside_diameter = value
         self._inside_diameter = value
 
-    # TODO create test
     @property
     def efficiency(self):
         if self._efficiency == 0:
             for part in self.canvas:
                 if isinstance(part, Pump):
-                    self._efficiency = part.efficiency
+                    if part.efficiency <= 0 or part.efficiency > 1:
+                        raise Exception("Efficiency must be from 0 to 1")
+                    else:
+                        self._efficiency = part.efficiency
         return self._efficiency
 
     @efficiency.setter
     def efficiency(self, value):
         for part in self.canvas:
             if isinstance(part, Pump):
-                part.efficiency = value
-        self._efficiency = value
+                if value <= 0 or value > 1:
+                    raise Exception("Efficiency must be from 0 to 1")
+                else:
+                    part.efficiency = value
+                    self._efficiency = part.efficiency
 
     def add_part(self, part: Part):
         self.canvas.append(part)
