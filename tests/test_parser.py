@@ -44,13 +44,3 @@ class ParserClassTester(unittest.TestCase):
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
-
-
-    '''
-    parser = par.Parser()
-    circuit = cir.Circuit()
-    parser.tsv(file_name1, circuit)
-    '''
-    #    parser.tsv("circuit.tsv", circuit, False)
-    pass
-    # parser.xml(file_name2, circuit)

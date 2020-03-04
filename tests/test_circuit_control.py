@@ -33,6 +33,7 @@ class CircuitControlTester(unittest.TestCase):
         print("\n" + circuit_name)
         self.faulty_circuits_control(self.circuit)
 
+    # todo remove these methods
     # ACTUAL TSV TESTS
     # First alternative with lambda function
     def test_tsp_invalid_circuit1_with_lambda_method(self):

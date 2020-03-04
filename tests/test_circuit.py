@@ -3,6 +3,9 @@ from module import circuit as cir
 
 
 class CircuitClassTester(unittest.TestCase):
+    """
+    Includes tests for both circuit and parts.
+    """
 
     # TODO move example_circuit here ?
     def setUp(self) -> None:
@@ -41,29 +44,31 @@ class CircuitClassTester(unittest.TestCase):
         part = circuit[1]
         self.assertIsInstance(part, cir.PipeStraight)
 
-    def test_get_name_set_name(self):
+    def test_get_set_name(self):
         circuit = self.example_circuit()
         self.assertEqual(circuit.name, "Some_name")
         circuit.name = "SomeOtherName"
         self.assertEqual(circuit.name, "SomeOtherName")
 
-    def test_get_height_set_height(self):
+    def test_get_set_height(self):
         circuit = self.example_circuit()
         self.assertEqual(circuit.height, 6, "Should be 6")
+        with self.assertRaises(Exception):
+            circuit.height = 0
 
-        # TODO Remove
-        # circuit.height = 12
-        self.assertEqual(circuit.height, 6)
-
-    def test_get_inside_diameter(self):
+    def test_get_set_inside_diameter(self):
         circuit = self.example_circuit()
         self.assertEqual(circuit.inside_diameter, 0.32, "Should be 0.32")
         circuit.inside_diameter = 12
         self.assertEqual(circuit.inside_diameter, 12)
 
-    def test_get_efficiency_of_pump(self):
+    def test_get_set_efficiency_of_pump(self):
         circuit = self.example_circuit()
         self.assertEqual(circuit.efficiency, 0.76, "Should be 0.76")
+        circuit.efficiency = 0.5
+        self.assertEqual(circuit.efficiency, 0.5)
+        with self.assertRaises(Exception):
+            circuit.efficiency = 100
 
     def test_add_part(self):
         circuit = cir.Circuit()
