@@ -32,3 +32,10 @@ class File:
 
     def __exit__(self, *args):
         self.open_file.close()
+
+    @staticmethod
+    def line_treatment(line: str, separator: str) -> list:
+        """Strips line and splits into list object."""
+        line = line.rstrip()
+        list_ = line.split(separator)
+        return list_

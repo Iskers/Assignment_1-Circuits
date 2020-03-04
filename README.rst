@@ -38,6 +38,7 @@ parameters as one want. For analysis of existing circuits import files into the 
 
 .. code:: bash
 
+    $ pip install -r requirements.txt
     $ python main.py
 
 
@@ -214,4 +215,4 @@ Consistency is key. After learning about new
 :Version:
     1.0
 :Date created: 03.02.2020
-:Last updated: 03.03.2020
+:Last updated: 04.03.2020

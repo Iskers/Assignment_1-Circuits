@@ -1,138 +1,157 @@
+import re
 import module.file_handler as fh
 import module.study_ as study
 
 
 class HTMLSerializer:
-    def __init__(self, indentation="\t"):
-        self._indentation = indentation
-        self._depth = 0
-
-    # GETTERS AND SETTERS
-    @property
-    def indentation(self):
-        return self._indentation
-
-    @indentation.setter
-    def indentation(self, value):
-        self._indentation = value
-
-    @property
-    def depth(self):
-        return self._depth
-
-    @depth.setter
-    def depth(self, value):
-        self._depth = value
-
-    # SERIALIZERS
-    @staticmethod
-    def _serialize_open_tag(name):
-        return "<" + name + ">\n"
-
-    @staticmethod
-    def _serialize_close_tag(name):
-        return "</" + name + ">\n"
-
-
-class HTMLContext(HTMLSerializer):
-    def __init__(self, html_serializer: HTMLSerializer, tag: str):
-        super().__init__(html_serializer.indentation)
-        self._indentation = html_serializer.indentation
-        self._depth = html_serializer.depth
-        self._tag = tag
-        self._line = ""
-
-    # OVERLOADS
-    def __iadd__(self, other):
-        self.line += other
-        return self
-
-    # CONTEXT DEFINITION
-    def __enter__(self):
-        self.line += self._serialize_open_tag(self.tag)
-        self.depth += 1
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.depth -= 1
-        self.line += self._serialize_close_tag(self.tag)
-
-    # SETTERS AND GETTERS
-    @property
-    def tag(self):
-        return self._tag
-
-    @property
-    def line(self):
-        return self._line
-
-    @line.setter
-    def line(self, value):
-        self._line = value
-
-    # HTML METHODS
-    # GENERAL METHODS
-    @staticmethod
-    def paragraph(html_serializer: HTMLSerializer, package: str):
-        with HTMLContext(html_serializer, "p") as context:
-            context += package
-        return context.line
-
-    @staticmethod
-    def table_row(html_serializer: HTMLSerializer, package: str):
-        with HTMLContext(html_serializer, "tr") as row:
-            row += package
-        return row.line
-
-    @staticmethod
-    def table_single_header(html_serializer: HTMLSerializer, package: str):
-        with HTMLContext(html_serializer, "th") as header:
-            header += package
-        return header.line
-
-    @staticmethod
-    def table_item(html_serializer: HTMLSerializer, package: str):
-        with HTMLContext(html_serializer, "td") as table_data:
-            table_data += package
-        return table_data.line
-
-    # COMPOSED METHODS
-    @staticmethod
-    def table_header(html_serializer: HTMLSerializer, list_: list):
-        complete_header = ""
-        for header in list_:
-            header += "\n"
-            complete_header += HTMLContext.table_single_header(html_serializer, header)
-        return HTMLContext.table_row(html_serializer, complete_header)
-
-    @staticmethod
-    def table_data(html_serializer: HTMLSerializer, list_: list, separator=","):
-        complete_data = ""
-        for data in list_:
-            data = str(data)
-            if data is not list_[-1]:
-                data += separator + "\n"
-                complete_data += HTMLContext.table_item(html_serializer, data)
-        return HTMLContext.table_row(html_serializer, complete_data)
-
-
-class StudyHTMLSerializer(HTMLSerializer):
     def __init__(self):
-        super().__init__()
+        pass
+
+    def serialize_circuit(self, circuit):
+        result = f"<h2>{circuit}</h2>"
+        result += self.serialize_open_tag("ul")
+        for part in circuit:
+            result += self.serialize_open_tag("li")
+            result += str(part)
+            result += self.serialize_close_tag("li")
+        result += self.serialize_close_tag("ul")
+        return result
+
+    def SerializeProductDescription(self, product):
+        return product.GetName() + " (profit per sale: " + self.SerializeCurrency(product.GetProfitPerSale()) + ")\n"
+
+    def SerializeTableOfSales(self, retailer):
+        result = self.serialize_open_tag("table")
+        # Header
+        result += self.serialize_open_tag("tr")
+        result += self.serialize_open_tag("th")
+        result += "Product\n"
+        result += self.serialize_close_tag("th")
+        for monthNumber in range(1, 13):
+            result += self.serialize_open_tag("th")
+            result += self.GetMonthTrigramFromMonthNumber(monthNumber) + "\n"
+            result += self.serialize_close_tag("th")
+        result += self.serialize_close_tag("tr")
+        # Sales
+        for product in retailer.GetProducts():
+            result += self.serialize_open_tag("tr")
+            result += self.serialize_open_tag("td")
+            result += product.GetName() + "\n"
+            result += self.serialize_close_tag("td")
+            for monthNumber in range(1, 13):
+                result += self.serialize_open_tag("td")
+                result += str(product.GetMonthlySales(monthNumber)) + "\n"
+                result += self.serialize_close_tag("td")
+            result += self.serialize_close_tag("tr")
+        result += self.serialize_close_tag("table")
+        return result
+
+    def SerializeTableOfProfits(self, retailer):
+        result = self.serialize_open_tag("table")
+        # Header
+        result += self.serialize_open_tag("tr")
+        result += self.serialize_open_tag("th")
+        result += "Product\n"
+        result += self.serialize_close_tag("th")
+        for monthNumber in range(1, 13):
+            result += self.serialize_open_tag("th")
+            result += self.GetMonthTrigramFromMonthNumber(monthNumber) + "\n"
+            result += self.serialize_close_tag("th")
+        result += self.serialize_open_tag("th")
+        result += "Year\n"
+        result += self.serialize_close_tag("th")
+        result += self.serialize_close_tag("tr")
+        # Profits
+        for product in retailer.GetProducts():
+            result += self.serialize_open_tag("tr")
+            result += self.serialize_open_tag("td")
+            result += product.GetName() + "\n"
+            result += self.serialize_close_tag("td")
+            for monthNumber in range(1, 13):
+                result += self.serialize_open_tag("td")
+                result += self.SerializeCurrency(product.ComputeMonthlyProfit(monthNumber)) + "\n"
+                result += self.serialize_close_tag("td")
+            result += self.serialize_open_tag("td")
+            result += self.SerializeCurrency(product.ComputeYearlyProfit()) + "\n"
+            result += self.serialize_close_tag("td")
+            result += self.serialize_close_tag("tr")
+        # Total
+        result += self.serialize_open_tag("tr")
+        result += self.serialize_open_tag("td")
+        result += "Total\n"
+        result += self.serialize_close_tag("td")
+        for monthNumber in range(1, 13):
+            result += self.serialize_open_tag("td")
+            result += self.SerializeCurrency(retailer.ComputeMonthlyProfit(monthNumber))
+            result += self.serialize_close_tag("td")
+        result += self.serialize_open_tag("td")
+        result += self.SerializeCurrency(retailer.ComputeYearlyProfit())
+        result += self.serialize_close_tag("td")
+        result += self.serialize_close_tag("tr")
+        result += self.serialize_close_tag("table")
+        return result
+
+    @staticmethod
+    def serialize_open_tag(name):
+        return f"<{name}>"
+
+    @staticmethod
+    def serialize_close_tag(name):
+        return f"</{name}>"
+
+    @staticmethod
+    def serialize_image(img_path):
+        return f"<img src={img_path}>"
+
+
+# 3. HTML Creator
+# --------------
+
+class HTMLCreator:
+    def __init__(self):
+        self.serializer = HTMLSerializer()
         self.study = study.Study()
 
-    # CLASS SPECIFIC HTML METHODS
-    def serialize_circuit(self, circuit):
-        result = self._serialize_open_tag("")
+    def ExportRetailerSalesAtHTMLFormat(self, retailer, templateFileName, targetFileName):
+        try:
+            templateFile = open(templateFileName, "r")
+        except:
+            sys.stderr.write('Unable to open file "%s"\n' % templateFileName)
+            sys.stderr.flush()
+            return 1
+        try:
+            targetFile = open(targetFileName, "w")
+        except:
+            sys.stderr.write('Unable to open file "%s"\n' % targetFileName)
+            sys.stderr.flush()
+            templateFile.close()
+            return 1
+        self.PrintReport(retailer, templateFile, targetFile)
+        templateFile.close()
+        targetFile.flush()
+        targetFile.close()
+        return 0
 
-    def serialize_list_of_energy_consumptions(self, list_: list):
-        return HTMLContext.table_data(self, list_)
+    def PrintImg(self, circuit):
+        self.study.example_study(circuit)
 
+    def PrintReport(self, retailer, templateFile, targetFile):
+        for line in templateFile:
+            line = line.rstrip()
+            if re.search(r'__PRODUCTS__', line):
+                line = re.sub(r'__PRODUCTS__', self.serializer.SerializeListOfProducts(retailer), line)
+            elif re.search(r'__SALES__', line):
+                line = re.sub(r'__SALES__', self.serializer.SerializeTableOfSales(retailer), line)
+            elif re.search(r'__PROFITS__', line):
+                line = re.sub(r'__PROFITS__', self.serializer.SerializeTableOfProfits(retailer), line)
+            targetFile.write(line + "\n")
 
+'''
 class PageGenerator:
     def __init__(self, template_file, target_file, **kwargs):
         self._template_file = template_file
         self._target_file = target_file
+        self.study_serializer = StudyHTMLSerializer()
         self.render_study(self.template_file, self.target_file)
 
     @property
@@ -143,13 +162,26 @@ class PageGenerator:
     def target_file(self):
         return self._target_file
 
-    @staticmethod
-    def render_study(template_file, target_file):
-        study_instance = study.Study()
-
+    def render_study(self, circuit, template_file, target_file):
         with fh.File(template_file, "r") as template:
-            for line in template:
-                line = line.rstrip()
+            with fh.File(target_file, "w") as target:
+                for line in template:
+                    line = self.HTML_replacement(circuit, line)
+                    target.write(line + '\n')
 
-        with fh.File(target_file, "w") as target:
-            pass
+    def serialize_circuit(self, circuit) -> str:
+
+        pass
+
+    def HTML_replacement(self, circuit, line: str):
+        line = line.rstrip()
+        # Methods to be called to replace placeholder in template with some value.
+        methods = {r'__Circuit__': lambda: re.sub(r'__Circuit__',
+                                                  self.study_serializer.serialize_circuit(circuit), line),
+                   r'__base_study__': lambda: re.sub(r'__base_study__', self.study_serializer
+                                                     .serialize_circuit(circuit), line)}
+        for key in methods:
+            if re.search(key, line):
+                return methods[key]
+        return line
+'''

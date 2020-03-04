@@ -53,7 +53,7 @@ class Parser:
 
     def _tsv_parser(self, file_source, circuit: cir.Circuit) -> cir.Circuit:
         header = file_source.readline()
-        header = self._line_treatment(header, self.separator)
+        header = fh.File.line_treatment(header, self.separator)
 
         for line in file_source:
             if "end\n" in line:
@@ -66,15 +66,8 @@ class Parser:
 
     def _tsv_line_parser(self, line: str, circuit: cir.Circuit):
         """Takes a line and appends it to a circuit"""
-        line = self._line_treatment(line, self.separator)
+        line = fh.File.line_treatment(line, self.separator)
         circuit.add_part_from_string(line)
-
-    @staticmethod
-    def _line_treatment(line: str, separator: str) -> list:
-        """Strips line and splits into list object."""
-        line = line.rstrip()
-        list_ = line.split(separator)
-        return list_
 
     def _xml_parser(self, file_source, circuit: cir.Circuit) -> cir.Circuit:
         xml_document = self._xml_document_loader(file_source)

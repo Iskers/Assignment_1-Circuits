@@ -1,8 +1,10 @@
 from pytypes import typechecked
+import matplotlib.pyplot as plt
 import numpy as np
 
 import module.circuit as cir
 import module.circuit_calculator as calc
+import module.path_finder as pf
 
 
 class Study:
@@ -17,19 +19,25 @@ class Study:
     def velocity_of_medium(self, value):
         self._velocity_of_medium = value
 
+    def example_study(self, circuit: cir.Circuit):
+        for i in range(1, 5):
+            self.velocity_of_medium = i
+            self.plot_changing_type(circuit, "inside_diameter", "Inside diameter study")
+
     def base_study(self, circuit: cir.Circuit):
         for i in range(1, 5):
             self.velocity_of_medium = i
             print(f"Study with velocity = {self.velocity_of_medium}")
-            print(f"Circuit with varying efficiency: \n{self._stepper_range(circuit, 'efficiency', 1, 0.1, 10)}\n")
-            print(f"Circuit with varying inside_diameter: \n{self._stepper_range(circuit, 'inside_diameter', 0.1, 1, 10)}\n")
-            print(f"Circuit with varying height: \n{self._stepper_range(circuit, 'height', 2, 10, 9)}\n")
-            print(f"Circuit with varying Valve settings: \n{self._stepper_bool(circuit, 'Valve')}\n")
-            print(f"Circuit with varying Filter settings: \n{self._stepper_bool(circuit, 'Filter')}\n")
+            print(f"Circuit with varying efficiency: \n{self._stepper_range(circuit, 'efficiency', 1, 0.1, 10)[0]}\n")
+            print(f"Circuit with varying inside_diameter: "
+                  f"\n{self._stepper_range(circuit, 'inside_diameter', 0.1, 1, 10)[0]}\n")
+            print(f"Circuit with varying height: \n{self._stepper_range(circuit, 'height', 2, 10, 9)[0]}\n")
+            print(f"Circuit with varying Valve settings: \n{self._stepper_bool(circuit, 'Valve')[0]}\n")
+            print(f"Circuit with varying Filter settings: \n{self._stepper_bool(circuit, 'Filter')[0]}\n")
 
-    def _stepper_range(self, circuit, type_, start: float, stop: float, step: int):
+    def _stepper_range(self, circuit, type_, start: float, stop: float, steps: int):
         energy_consumptions = []
-        list_ = np.linspace(start, stop, step)
+        list_ = np.linspace(start, stop, steps)
         with circuit as test_circuit:
             if type_ == "height":
                 for i in range(len(list_)):
@@ -39,7 +47,7 @@ class Study:
                 for i in range(len(list_)):
                     setattr(test_circuit, type_, list_[i])
                     self._append_energy_consumption(test_circuit, energy_consumptions)
-        return energy_consumptions
+        return energy_consumptions, list_
 
     def _stepper_bool(self, circuit: cir.Circuit, type_) -> list:
         if type_ == "Valve":
@@ -53,23 +61,32 @@ class Study:
 
     # Uses eval, should only be run when tested type_
     def _stepper_type(self, circuit: cir.Circuit, type_, attribute: str) -> list:
+        """
+        Takes in a circuit and changes the valves or filters to give different results.
+
+        :param circuit: Circuit to analyze
+        :param type_: String with value "Valve" or "Filter"
+        :param attribute: Attribute connected to type_ class.
+        :return: List of energy consumption.
+        """
         energy_consumptions = []
 
-        with circuit as circuit:
-            for part in circuit.canvas:
+        with circuit as test_circuit:
+            for part in test_circuit.canvas:
                 if isinstance(part, eval("cir." + type_)):
                     setattr(part, attribute, True)
 
-            self._append_energy_consumption(circuit, energy_consumptions)
-            for part in circuit.canvas:
+            self._append_energy_consumption(test_circuit, energy_consumptions)
+            for part in test_circuit.canvas:
                 if isinstance(part, eval("cir." + type_)):
                     setattr(part, attribute, False)
-                    self._append_energy_consumption(circuit, energy_consumptions)
+                    self._append_energy_consumption(test_circuit, energy_consumptions)
         return energy_consumptions
 
     def _canvas_height_adapt(self, circuit, height: float) -> int:
         """
         Inserts a vertical straight pipe with the given length to the given circuit
+
         :param circuit: Some Circuit
         :param height:
         :return: height
@@ -101,7 +118,6 @@ class Study:
             circuit.height = None
             return circuit.height
 
-    # TODO expand for more parts
     @typechecked
     def _add_parts_to_canvas(self, circuit: cir.Circuit, part_to_be_added: cir.Part, amount: int = 1) -> None:
         """
@@ -128,3 +144,24 @@ class Study:
         data = calculator.calculate_actual_energy_for_circuit(circuit)
         data = round(data, 2)
         list_.append(data)
+
+    def plot_changing_type(self, circuit, type_, file_name):
+        if type_ == "inside_diameter":
+            start = 0.1
+            stop = 1
+            steps = 10
+            y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
+            self._plot_image_generator(x_values, y_values, f"Increasing {type_}", "Energy consumption", f"Study {type_}"
+                                       , file_name)
+        
+
+    @staticmethod
+    def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name):
+        plt.plot(x_values, y_values)
+        plt.title(title)
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        path = pf.PathFinder.get_pure_path("templates")
+        file_path = f"/{path}/{file_name}"
+        plt.savefig(file_path)
+        return file_name

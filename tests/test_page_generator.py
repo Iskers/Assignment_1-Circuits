@@ -5,7 +5,7 @@ import module.file_handler as fh
 import module.study_ as stdy
 import tests.test_circuit as tst_cir
 
-
+'''
 class TestPageGenerator(TestCase):
     def setUp(self) -> None:
         self.template_file = pf.PathFinder.get_file_path("study-template.html", "templates")
@@ -41,3 +41,43 @@ class TestStudyHTMLSerializer(TestCase):
         gen = pgen.StudyHTMLSerializer()
         string = pgen.HTMLContext.table_header(gen, list_)
         print(string)
+'''
+
+
+class TestHTMLSerializer(TestCase):
+    def setUp(self) -> None:
+        self.html_serializer = pgen.HTMLSerializer()
+        self.circuit = tst_cir.CircuitClassTester.example_circuit()
+
+    def tearDown(self) -> None:
+        self.html_serializer = None
+        self.circuit = None
+
+    def test_serialize_circuit(self):
+        self.html_serializer.serialize_circuit(self.circuit)
+
+
+    def test_serialize_product_description(self):
+        html_creator = pgen.HTMLCreator()
+        html_creator.PrintImg(self.circuit)
+
+    def test_serialize_table_of_sales(self):
+        self.fail()
+
+    def test_serialize_table_of_profits(self):
+        self.fail()
+
+    def test_serialize_indentation(self):
+        self.fail()
+
+    def test_serialize_open_tag(self):
+        self.fail()
+
+    def test_serialize_close_tag(self):
+        self.fail()
+
+    def test_serialize_currency(self):
+        self.fail()
+
+    def test_get_month_trigram_from_month_number(self):
+        self.fail()
