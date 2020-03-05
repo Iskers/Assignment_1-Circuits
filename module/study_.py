@@ -19,10 +19,16 @@ class Study:
     def velocity_of_medium(self, value):
         self._velocity_of_medium = value
 
-    def example_study(self, circuit: cir.Circuit):
-        for i in range(1, 5):
+    def png_generator_plot(self, circuit: cir.Circuit):
+        for i in range(1, 6):
             self.velocity_of_medium = i
+
+            plt.figure(0)
             self.plot_changing_type(circuit, "inside_diameter", "Inside diameter study")
+            plt.figure(1)
+            self.plot_changing_type(circuit, "efficiency", "Efficiency study", steps=90)
+            plt.figure(2)
+            self.plot_changing_type(circuit, "height", "Height study", start=2, stop=10, steps=9)
 
     def base_study(self, circuit: cir.Circuit):
         for i in range(1, 5):
@@ -145,19 +151,30 @@ class Study:
         data = round(data, 2)
         list_.append(data)
 
-    def plot_changing_type(self, circuit, type_, file_name):
+    def plot_changing_type(self, circuit, type_, file_name, start=0.1, stop=1, steps=10):
         if type_ == "inside_diameter":
-            start = 0.1
-            stop = 1
-            steps = 10
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
-            self._plot_image_generator(x_values, y_values, f"Increasing {type_}", "Energy consumption", f"Study {type_}"
-                                       , file_name)
+            self._plot_image_generator(x_values, y_values, f"Increasing inside diameter", "Energy consumption",
+                                       f"Study inside diameter", file_name,
+                                       label=f"Velocity = {str(self.velocity_of_medium)}")
+
+        elif type_ == "efficiency":
+            y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
+            self._plot_image_generator(x_values, y_values, f"Decreasing efficiency", "Energy consumption",
+                                       f"Study efficiency", file_name,
+                                       label=f"Velocity = {str(self.velocity_of_medium)}")
+
+        elif type_ == "height":
+            y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
+            self._plot_image_generator(x_values, y_values, f"Increasing height", "Energy consumption",
+                                       f"Study height", file_name,
+                                       label=f"Velocity = {str(self.velocity_of_medium)}")
 
     @staticmethod
-    def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name):
-        plt.plot(x_values, y_values)
+    def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name, label=""):
+        plt.plot(x_values, y_values, label=label)
         plt.title(title)
+        plt.legend()
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         path = pf.PathFinder.get_pure_path("templates")

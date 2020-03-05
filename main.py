@@ -8,4 +8,3 @@ if __name__ == '__main__':
     circuit.efficiency = 0.5
     print(circuit.efficiency)
     print(circuit.canvas)
-

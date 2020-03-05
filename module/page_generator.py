@@ -96,7 +96,7 @@ class HTMLCreator:
         return 0
 
     def PrintImg(self, circuit):
-        self.study.example_study(circuit)
+        self.study.png_generator_plot(circuit)
 
     def PrintReport(self, retailer, templateFile, targetFile):
         for line in templateFile:
