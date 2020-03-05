@@ -77,3 +77,16 @@ class CircuitClassTester(unittest.TestCase):
         self.assertIsInstance(circuit[0], cir.PipeStraight)
 
     # TODO Add testers for more parts
+
+    def test_get_attribute(self):
+        circuit = self.example_circuit()
+
+        for attr, value in circuit[1].__dict__.items():
+            print(attr, value)
+
+        for property_, value in vars(circuit[1]).items():
+            print(property_, value)
+
+        for property_ in dir(circuit[1]):
+            if not property_.startswith('_'):
+                print(property_)

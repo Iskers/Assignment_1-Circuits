@@ -17,78 +17,41 @@ class HTMLSerializer:
         result += self.serialize_close_tag("ul")
         return result
 
-    def SerializeProductDescription(self, product):
-        return product.GetName() + " (profit per sale: " + self.SerializeCurrency(product.GetProfitPerSale()) + ")\n"
-
-    def SerializeTableOfSales(self, retailer):
-        result = self.serialize_open_tag("table")
-        # Header
+    def serialize_circuit_attributes(self, circuit):
+        result = f"<h2>{circuit}</h2>"
+        result += self.serialize_open_tag("table")
         result += self.serialize_open_tag("tr")
-        result += self.serialize_open_tag("th")
-        result += "Product\n"
-        result += self.serialize_close_tag("th")
-        for monthNumber in range(1, 13):
-            result += self.serialize_open_tag("th")
-            result += self.GetMonthTrigramFromMonthNumber(monthNumber) + "\n"
-            result += self.serialize_close_tag("th")
+        result += self.serialize_message("th", "Attribute")
+        for part in circuit:
+            result += self.serialize_message("th", f"{type(part).__name__}")
         result += self.serialize_close_tag("tr")
-        # Sales
-        for product in retailer.GetProducts():
-            result += self.serialize_open_tag("tr")
-            result += self.serialize_open_tag("td")
-            result += product.GetName() + "\n"
-            result += self.serialize_close_tag("td")
-            for monthNumber in range(1, 13):
-                result += self.serialize_open_tag("td")
-                result += str(product.GetMonthlySales(monthNumber)) + "\n"
-                result += self.serialize_close_tag("td")
-            result += self.serialize_close_tag("tr")
+
+        properties = {"ZETA"}
+        for part in circuit:
+            for evaluation_property, unused_value in vars(part).items():
+                if evaluation_property not in properties:
+                    property_print = evaluation_property[1:]
+                    property_print = property_print.replace("_", " ")
+                    property_print = property_print.title()
+                    result += self.serialize_open_tag("tr")
+                    result += self.serialize_message("td", property_print)
+                    for inner_part in circuit:
+                        if evaluation_property not in vars(inner_part):
+                            result += self.serialize_message("td", "")
+                        else:
+                            for item_property, value in vars(inner_part).items():
+                                if item_property == evaluation_property:
+                                    result += self.serialize_message("td", value)
+                    properties.add(evaluation_property)
+                    result += self.serialize_close_tag("tr")
         result += self.serialize_close_tag("table")
         return result
 
-    def SerializeTableOfProfits(self, retailer):
-        result = self.serialize_open_tag("table")
-        # Header
-        result += self.serialize_open_tag("tr")
-        result += self.serialize_open_tag("th")
-        result += "Product\n"
-        result += self.serialize_close_tag("th")
-        for monthNumber in range(1, 13):
-            result += self.serialize_open_tag("th")
-            result += self.GetMonthTrigramFromMonthNumber(monthNumber) + "\n"
-            result += self.serialize_close_tag("th")
-        result += self.serialize_open_tag("th")
-        result += "Year\n"
-        result += self.serialize_close_tag("th")
-        result += self.serialize_close_tag("tr")
-        # Profits
-        for product in retailer.GetProducts():
-            result += self.serialize_open_tag("tr")
-            result += self.serialize_open_tag("td")
-            result += product.GetName() + "\n"
-            result += self.serialize_close_tag("td")
-            for monthNumber in range(1, 13):
-                result += self.serialize_open_tag("td")
-                result += self.SerializeCurrency(product.ComputeMonthlyProfit(monthNumber)) + "\n"
-                result += self.serialize_close_tag("td")
-            result += self.serialize_open_tag("td")
-            result += self.SerializeCurrency(product.ComputeYearlyProfit()) + "\n"
-            result += self.serialize_close_tag("td")
-            result += self.serialize_close_tag("tr")
-        # Total
-        result += self.serialize_open_tag("tr")
-        result += self.serialize_open_tag("td")
-        result += "Total\n"
-        result += self.serialize_close_tag("td")
-        for monthNumber in range(1, 13):
-            result += self.serialize_open_tag("td")
-            result += self.SerializeCurrency(retailer.ComputeMonthlyProfit(monthNumber))
-            result += self.serialize_close_tag("td")
-        result += self.serialize_open_tag("td")
-        result += self.SerializeCurrency(retailer.ComputeYearlyProfit())
-        result += self.serialize_close_tag("td")
-        result += self.serialize_close_tag("tr")
-        result += self.serialize_close_tag("table")
+    @staticmethod
+    def serialize_message(tag: str, msg) -> str:
+        result = HTMLSerializer.serialize_open_tag(tag)
+        result += str(msg)
+        result += HTMLSerializer.serialize_close_tag(tag)
         return result
 
     @staticmethod

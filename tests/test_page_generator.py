@@ -56,28 +56,9 @@ class TestHTMLSerializer(TestCase):
     def test_serialize_circuit(self):
         self.html_serializer.serialize_circuit(self.circuit)
 
+    def test_serialize_circuit_attributes(self):
+        self.html_serializer.serialize_circuit_attributes(self.circuit)
 
     def test_serialize_product_description(self):
         html_creator = pgen.HTMLCreator()
         html_creator.PrintImg(self.circuit)
-
-    def test_serialize_table_of_sales(self):
-        self.fail()
-
-    def test_serialize_table_of_profits(self):
-        self.fail()
-
-    def test_serialize_indentation(self):
-        self.fail()
-
-    def test_serialize_open_tag(self):
-        self.fail()
-
-    def test_serialize_close_tag(self):
-        self.fail()
-
-    def test_serialize_currency(self):
-        self.fail()
-
-    def test_get_month_trigram_from_month_number(self):
-        self.fail()
