@@ -60,7 +60,6 @@ class Circuit:
         del self._name_backup, self._validness_backup, self._canvas_backup, self._inside_diameter_backup, \
             self._height_backup, self._efficiency_backup, self._filter_count_backup, self._valve_count_backup
 
-
     @property
     def name(self):
         return self._name

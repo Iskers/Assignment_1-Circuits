@@ -43,7 +43,8 @@ class Study:
             velocities.append(i)
         return valve_study, filter_study, velocities
 
-    def base_study(self, circuit: cir.Circuit):
+    # Legacy atm
+    def base_study(self, circuit: cir.Circuit):  # pragma: no cover
         for i in range(1, 5+1):
             self.velocity_of_medium = i
             print(f"Study with velocity = {self.velocity_of_medium}")
@@ -207,6 +208,6 @@ class Study:
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         path = pf.PathFinder.get_folder_path("templates")
-        file_path = f"/{path}/{file_name}"
+        file_path = f"{path}/{file_name}"
         plt.savefig(file_path)
         return file_name

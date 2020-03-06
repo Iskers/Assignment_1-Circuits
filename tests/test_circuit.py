@@ -44,6 +44,9 @@ class CircuitClassTester(unittest.TestCase):
         circuit = self.example_circuit()
         part = circuit[1]
         self.assertIsInstance(part, cir.PipeStraight)
+        with self.assertRaises(Exception):
+            part = circuit["se"]
+
 
     def test_get_set_name(self):
         circuit = self.example_circuit()
@@ -70,6 +73,10 @@ class CircuitClassTester(unittest.TestCase):
         self.assertEqual(circuit.efficiency, 0.5)
         with self.assertRaises(Exception):
             circuit.efficiency = 100
+        with self.assertRaises(Exception):
+            circuit[2]._efficiency = 10
+            circuit._efficiency = 0
+            efficiency = circuit.efficiency
 
     def test_add_part(self):
         circuit = cir.Circuit()
@@ -77,17 +84,13 @@ class CircuitClassTester(unittest.TestCase):
         circuit.add_part_from_string(part_pipe_list_str)
         self.assertIsInstance(circuit[0], cir.PipeStraight)
 
-    # TODO Add testers for more parts
-
     def test_get_attribute(self):
         circuit = self.example_circuit()
 
-        for attr, value in circuit[1].__dict__.items():
-            print(attr, value)
-
-        for property_, value in vars(circuit[1]).items():
-            print(property_, value)
+        for attr, value in vars(circuit[1]).items():
+            self.assertIsNotNone(value)
+            self.assertIsNotNone(attr)
 
         for property_ in dir(circuit[1]):
             if not property_.startswith('_'):
-                print(property_)
+                self.assertIsNotNone(property_)

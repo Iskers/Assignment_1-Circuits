@@ -81,7 +81,7 @@ class TestHTMLCreator(TestCase):
         pass
 
     def test_serialize_img_study(self):
-        print(self.html_creator.print_img(self.circuit))
+        self.assertIsNotNone(self.html_creator.print_img(self.circuit))
 
     def test_print_boolean_study(self):
-        print(self.html_creator.print_boolean_study(self.circuit))
+        self.assertIsNotNone(self.html_creator.print_boolean_study(self.circuit))

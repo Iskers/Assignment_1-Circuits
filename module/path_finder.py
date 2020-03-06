@@ -1,8 +1,10 @@
 import pathlib
+import platform
 
 
 class PathFinder:
     file_path = pathlib.Path(__file__).parent
+    OS = platform.system()
 
     @classmethod
     def get_folder_path(cls, folder_name):

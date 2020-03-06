@@ -26,7 +26,7 @@ class File:
         try:
             self.open_file = open(self.file_name, self.mode)
             return self.open_file
-        except OSError:
+        except OSError:  # pragma: no cover
             sys.stderr.write(f"Could not open file: {self.file_name}" + '\n')
             sys.exit()
 

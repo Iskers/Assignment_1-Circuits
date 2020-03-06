@@ -1,7 +1,8 @@
 # noinspection PyUnboundLocalVariable
+from unittest import TestCase
+
 if __name__ == "__main__" and __package__ is None:  # pragma: no cover
     __package__ = "package.tests"
-
 
 import pathlib
 import unittest
@@ -22,6 +23,7 @@ class ParserClassTester(unittest.TestCase):
     destructor after the tests function is run.
     In this way each tests has a fresh parser and circuit.
     """
+
     def setUp(self) -> None:
         self.parser = par.Parser()
         self.circuit = cir.Circuit()
@@ -37,10 +39,13 @@ class ParserClassTester(unittest.TestCase):
             pass
     '''
 
+    def test_parse(self):
+        with self.assertRaises(Exception):
+            self.parser.parse(file_name="circuit.xml", true_path=False, format_="random_format")
+
     def test_xml(self):
         circuit = self.parser.parse(file_name="circuit.xml", true_path=False, format_="xml")
         pass
 
-
-if __name__ == '__main__':  # pragma: no cover
-    unittest.main()
+    def test_separator(self):
+        self.parser.separator = " "

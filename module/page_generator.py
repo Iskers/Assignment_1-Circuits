@@ -82,7 +82,7 @@ class HTMLSerializer:
 
         serialized_valve_string = self._serialize_message("tr", serialized_valve_string)
         for i in range(len(velocities)):
-            serialized_velocity_string = self._serialize_message("td", f"Velocity = {velocities[i]}m/s")
+            serialized_velocity_string = self._serialize_message("td", f"Velocity = {velocities[i]}[m/s]")
             for key in boolean_study[i]:
                 serialized_velocity_string += self._serialize_message("td", boolean_study[i][key])
             serialized_valve_string += self._serialize_message("tr", serialized_velocity_string)

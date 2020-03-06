@@ -100,11 +100,6 @@ class Pipe(Part):
     def inside_diameter(self, value):
         self._inside_diameter = value
 
-    @classmethod
-    def initialize_with_args(cls, *args):
-        pipe = cls(args[0][1], args[0][2])
-        return pipe
-
 
 class PipeStraight(Pipe):
     def __init__(self, name: str, inside_diameter: float, length: float, angle: int = 0):
