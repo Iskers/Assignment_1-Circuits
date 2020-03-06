@@ -19,27 +19,40 @@ class Study:
     def velocity_of_medium(self, value):
         self._velocity_of_medium = value
 
-    def png_generator_plot(self, circuit: cir.Circuit):
-        for i in range(1, 6):
+    def png_generator_plot(self, circuit: cir.Circuit, start_velocity=1, stop_velocity=5):
+        file_names = ("Inside diameter study.png", "Efficiency study.png", "Height study.png")
+        for i in range(start_velocity, stop_velocity+1):
+            self.velocity_of_medium = i
+            plt.figure(0)
+            self.plot_changing_type(circuit, "inside_diameter", file_names[0])
+            plt.figure(1)
+            self.plot_changing_type(circuit, "efficiency", file_names[1], steps=90)
+            plt.figure(2)
+            self.plot_changing_type(circuit, "height", file_names[2], start=2, stop=10, steps=9)
+        return file_names
+
+    def boolean_study(self, circuit):
+        valve_study = []
+        filter_study = []
+        velocities = []
+        for i in range(1, 5+1):
             self.velocity_of_medium = i
 
-            plt.figure(0)
-            self.plot_changing_type(circuit, "inside_diameter", "Inside diameter study")
-            plt.figure(1)
-            self.plot_changing_type(circuit, "efficiency", "Efficiency study", steps=90)
-            plt.figure(2)
-            self.plot_changing_type(circuit, "height", "Height study", start=2, stop=10, steps=9)
+            valve_study.append(self._stepper_boolean(circuit, "Valve"))
+            filter_study.append(self._stepper_boolean(circuit, "Filter"))
+            velocities.append(i)
+        return valve_study, filter_study, velocities
 
     def base_study(self, circuit: cir.Circuit):
-        for i in range(1, 5):
+        for i in range(1, 5+1):
             self.velocity_of_medium = i
             print(f"Study with velocity = {self.velocity_of_medium}")
             print(f"Circuit with varying efficiency: \n{self._stepper_range(circuit, 'efficiency', 1, 0.1, 10)[0]}\n")
             print(f"Circuit with varying inside_diameter: "
                   f"\n{self._stepper_range(circuit, 'inside_diameter', 0.1, 1, 10)[0]}\n")
             print(f"Circuit with varying height: \n{self._stepper_range(circuit, 'height', 2, 10, 9)[0]}\n")
-            print(f"Circuit with varying Valve settings: \n{self._stepper_bool(circuit, 'Valve')[0]}\n")
-            print(f"Circuit with varying Filter settings: \n{self._stepper_bool(circuit, 'Filter')[0]}\n")
+            print(f"Circuit with varying Valve settings: \n{self._stepper_boolean(circuit, 'Valve')[0]}\n")
+            print(f"Circuit with varying Filter settings: \n{self._stepper_boolean(circuit, 'Filter')[0]}\n")
 
     def _stepper_range(self, circuit, type_, start: float, stop: float, steps: int):
         energy_consumptions = []
@@ -55,7 +68,7 @@ class Study:
                     self._append_energy_consumption(test_circuit, energy_consumptions)
         return energy_consumptions, list_
 
-    def _stepper_bool(self, circuit: cir.Circuit, type_) -> list:
+    def _stepper_boolean(self, circuit: cir.Circuit, type_) -> dict:
         if type_ == "Valve":
             attribute = "openness"
             return self._stepper_type(circuit, type_, attribute)
@@ -66,28 +79,44 @@ class Study:
             raise Exception(f"Invalid type, expected Valve, or Filter, given {type_}")
 
     # Uses eval, should only be run when tested type_
-    def _stepper_type(self, circuit: cir.Circuit, type_, attribute: str) -> list:
+    def _stepper_type(self, circuit: cir.Circuit, type_, attribute: str) -> dict:
         """
         Takes in a circuit and changes the valves or filters to give different results.
 
         :param circuit: Circuit to analyze
         :param type_: String with value "Valve" or "Filter"
         :param attribute: Attribute connected to type_ class.
-        :return: List of energy consumption.
+        :return: Dictionary of energy_consumptions. Key is attribute status.
         """
         energy_consumptions = []
-
+        parts_count = 0
         with circuit as test_circuit:
+            # Normalize circuit
             for part in test_circuit.canvas:
                 if isinstance(part, eval("cir." + type_)):
                     setattr(part, attribute, True)
+                    parts_count += 1
 
+            # attributes_matrix = [ [1]*parts_count ] * (parts_count+1)
+            # Create a matrix to represent the changed types. All should be true for first round.
+            attributes_matrix = []
+            for i in range(parts_count+1):
+                attributes_matrix.append([1]*parts_count)
+            i = 1
             self._append_energy_consumption(test_circuit, energy_consumptions)
+
+            # Goes through parts and sets one by one to false and appends. Also appends to attributes
             for part in test_circuit.canvas:
                 if isinstance(part, eval("cir." + type_)):
+                    for j in range(i, parts_count+1):
+                        attributes_matrix[j][i-1] = 0
                     setattr(part, attribute, False)
                     self._append_energy_consumption(test_circuit, energy_consumptions)
-        return energy_consumptions
+                    i += 1
+
+        attributes_matrix = tuple(tuple(attribute_list) for attribute_list in attributes_matrix)
+        dictionary = dict(zip(attributes_matrix, energy_consumptions))
+        return dictionary
 
     def _canvas_height_adapt(self, circuit, height: float) -> int:
         """
@@ -177,7 +206,7 @@ class Study:
         plt.legend()
         plt.xlabel(x_label)
         plt.ylabel(y_label)
-        path = pf.PathFinder.get_pure_path("templates")
+        path = pf.PathFinder.get_folder_path("templates")
         file_path = f"/{path}/{file_name}"
         plt.savefig(file_path)
         return file_name

@@ -1,11 +1,11 @@
 body {
-  background-color: AliceBlue;
+  background-color: antiquewhite;
 }
 h1 {
   background-color: DarkBlue;
   color: White;
   font-family: Helvetica, serif;
-  font-size: 140%;
+  font-size: 300%;
 }
 h2 {
   background-color: Blue;
@@ -13,7 +13,53 @@ h2 {
 }
 p {
   color: black;
+  font-family: Helvetica, serif;
 }
 a {
   border: 1px solid red;
   }
+table{
+  border: 1px solid black;
+  border-spacing: 10px;
+  border-collapse: separate;
+  width: 40%;
+}
+tr, td, th{
+  padding: 8px;
+  text-align: left
+}
+th{
+  border: 1px solid black;
+  background-color: #4CAF50;
+  color: white;
+}
+td{
+  /*border-spacing: 30px;*/
+  border: 1px solid black;
+  background-color: white;
+}
+
+td#property{
+  background-color: black;
+  color: white;
+}
+
+table#circuit th{
+  background-color: black;
+}
+td#property:nth-of-type(even){
+  background-color: black;
+  color: white;
+}
+
+td#item_property{
+  color: blue;
+  background-color: white;
+}
+td#empty_item_property{
+  background-color: gray;
+}
+img{
+  max-width:33%;
+  max-height:auto;
+}

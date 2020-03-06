@@ -2,13 +2,13 @@ import pathlib
 
 
 class PathFinder:
-    @staticmethod
-    def get_file_path(file_name, folder_name):
-        """Returns path to folder_name in package directory for relative file loading"""
-        file_path = pathlib.Path(__file__).parent
-        return file_path.parent / folder_name / file_name
+    file_path = pathlib.Path(__file__).parent
 
-    @staticmethod
-    def get_pure_path(folder_name):
-        file_path = pathlib.Path(__file__).parent
-        return file_path.parent / folder_name / ""
+    @classmethod
+    def get_folder_path(cls, folder_name):
+        return cls.file_path.parent / folder_name / ""
+
+    @classmethod
+    def get_file_path(cls, file_name, folder_name):
+        """Returns path to folder_name in package directory for relative file loading"""
+        return cls.file_path.parent / folder_name / file_name

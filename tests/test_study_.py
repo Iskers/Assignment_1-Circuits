@@ -8,7 +8,7 @@ class TestStudy(TestCase):
         parser = pars.Parser()
         study = stdy.Study()
         circuit = parser.parse("task_circuit.tsv", format_="tsv", true_path=False)
-        study.base_study(circuit)
+        # study.base_study(circuit)
 
     def test__canvas_height_adapt(self):
         parser = pars.Parser()
