@@ -9,7 +9,6 @@ class TestHTMLSerializer(TestCase):
         self.html_serializer = pgen.HTMLSerializer()
         self.circuit = tst_cir.CircuitClassTester.example_circuit()
         self.html_creator = pgen.HTMLPageGenerator()
-        self.study = stdy.Study()
 
     def tearDown(self) -> None:
         self.html_serializer = None
@@ -37,12 +36,6 @@ class TestHTMLCreator(TestCase):
 
     def test_export_circuit_study_in_html(self):
         self.html_creator.export_circuit_study_in_HTML(self.circuit, "study-template.html", "study.html")
-
-    def test_print_report(self):
-        pass
-
-    def test_html_replacement(self):
-        pass
 
     # Not to be run as it interferes with printing
     def test_serialize_img_study(self):
