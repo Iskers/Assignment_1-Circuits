@@ -199,9 +199,9 @@ To use this feature one has to:
     $ cd /path/to/project-dir/
     $ python -m unittest
 
-Testing during this projects development is done using the packages unittest and coverage. Coverages gives the
-developer an overview of what lines of code has been run. The tests developed have tried to give 100% coverage to
-ensure that all lines have been tested and gives the expected response.
+Testing during this projects development is done using, as mentioned earlier, the packages **unittest** as well as
+**coverage**. Coverages gives the developer an overview of what lines of code has been run. The tests developed have
+tried to give 100% coverage to ensure that all lines have been tested and gives the expected response.
 
 Testing has also been done with coverage, and a report has been generated showing what lines have been tested and which
 have not been tested with the current method. All necessary tests have been run, but are not included in tests.
@@ -248,5 +248,7 @@ saved me a lot of time not to adapt them until the next project.
     Oskar T. Inderberg
 :Version:
     1.0
+:GitHub:
+    https://github.com/Iskers/Assignment_1-Circuits
 :Date created: 03.02.2020
-:Last updated: 07.03.2020
+:Last updated: 08.03.2020

@@ -3,10 +3,12 @@ body {
   margin: 2.5%;
   font-family: Helvetica, serif
 }
+
 h1 {
   background-color: DarkBlue;
   ;
   color: White;
+  text-align: center;
   font-family: Helvetica, serif;
   font-size: 300%;
 }
