@@ -41,23 +41,6 @@ class CircuitFormulas:
     def calculate_losses_of_pressure_other(density_of_medium: int, velocity_of_medium: float, zeta: float) -> float:
         return zeta * density_of_medium / 2 * velocity_of_medium ** 2
 
-    # TODO Remove method, Legacy method
-    @staticmethod
-    def calculate_losses_of_pressure(**kwargs):
-        ans = None
-        try:
-            ans = CircuitFormulas.calculate_losses_of_pressure_in_pipe(kwargs["flow_coefficient"],
-                                                                       kwargs["inside_diameter"],
-                                                                       kwargs["density_of_medium"],
-                                                                       kwargs["velocity_of_medium"])
-        except KeyError:
-            print("continue")
-        else:
-            ans = CircuitFormulas.calculate_losses_of_pressure_other(kwargs["density_of_medium"],
-                                                                     kwargs["velocity_of_medium"],
-                                                                     kwargs["zeta"])
-        return ans
-
     @staticmethod
     def calculate_flow(area: float, velocity: float) -> float:
         return area * velocity

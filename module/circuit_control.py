@@ -46,7 +46,6 @@ class CircuitControl:
 
             # Control that a tank is followed by a horizontal pipe
             if isinstance(previous_part, pt.Tank):
-                # TODO Altered, needs check
                 if isinstance(part, pt.PipeStraight):
                     if part.angle == 0:
                         pass
@@ -62,7 +61,6 @@ class CircuitControl:
 
             # Control Valves
             elif isinstance(part, pt.Valve):
-                # TODO check if necessary
                 if valve_check_part is None:
                     if not isinstance(previous_part, pt.Pipe):
                         raise Exception(f"{part!r}, {previous_part} preceding type Valve is not a pipe")
@@ -77,7 +75,6 @@ class CircuitControl:
                         raise Exception(f"{part!r}, all pipes in circuit must have the same inside diameter. Inside "
                                         f"diameter set for this circuit is {inside_diameter_check}.")
 
-                # TODO altered, needs check
                 if isinstance(previous_part, pt.PipeStraight) and isinstance(part, pt.PipeStraight):
                     if part.angle != previous_part.angle:
                         raise Exception(f"{part!r}, pipes following each other must have the same angle,"

@@ -33,19 +33,6 @@ class CircuitControlTester(unittest.TestCase):
         print("\n" + circuit_name)
         self.faulty_circuits_control(self.circuit)
 
-    # todo remove these methods
-    # ACTUAL TSV TESTS
-    # First alternative with lambda function
-    def test_tsp_invalid_circuit1_with_lambda_method(self):
-        self.circuit = self.tsv_standard("invalid_circuit1.tsv")
-        self.assertRaises(Exception, lambda: self.controller.control_circuit(self.circuit))
-
-    # Second alternative with context manager
-    def test_tsc_invalid_circuit2_with_context_manager(self):
-        self.circuit = self.tsv_standard("invalid_circuit2.tsv")
-        with self.assertRaises(Exception) as excep:
-            self.controller.control_circuit(self.circuit)
-
 
 class StandardCircuitTester(CircuitControlTester):
     def setUp(self) -> None:

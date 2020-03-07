@@ -1,6 +1,7 @@
 body {
   background-color: antiquewhite;
   margin: 2.5%;
+  font-family: Helvetica, serif
 }
 h1 {
   background-color: DarkBlue;
@@ -14,6 +15,9 @@ h2 {
   text-decoration-color: black;
   color: black;
 }
+h3 {
+  font-size: 120%;
+}
 p {
   color: black;
   font-family: Helvetica, serif;
@@ -21,6 +25,9 @@ p {
 a {
   border: 1px solid red;
   }
+li {
+  font-size: 120%;
+}
 table{
   border: 1px solid black;
   border-spacing: 10px;

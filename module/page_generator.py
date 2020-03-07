@@ -81,7 +81,7 @@ class HTMLSerializer:
         body += self._serialize_message("li", f"Flow = {round(core_attributes[1], 4)} [m3/s]")
         body += self._serialize_message("li", f"Pressure losses due to height of circuit = {round(core_attributes[2])}"
                                               f" [N/m2]")
-        body += self._serialize_message("li", f"Pressure losses due to frictions in parts = "
+        body += self._serialize_message("li", f"Pressure losses due to friction in parts = "
                                               f"{round(core_attributes[3])} [N/m2]")
         body += self._serialize_message("li", f"Theoretical energy usage of circuit = {round(core_attributes[4], 2)}"
                                               f" [kW]")
@@ -176,7 +176,7 @@ class HTMLPageGenerator:
         # Lambda takes in two arguments and gives back string.
         methods = {r'__Circuit__': lambda line, circuit: re.sub(r'__Circuit__', self.print_circuit(circuit), line),
                    r'__core_attributes__': lambda line, circuit: re.sub(r'__core_attributes__',
-                                                                        self.print_core_attributes(circuit, 5), line),
+                                                                        self.print_core_attributes(circuit, 1), line),
                    r'__boolean_study__': lambda line, circuit: re.sub(r'__boolean_study__',
                                                                       self.print_boolean_study(circuit), line),
                    r'__image_study__': lambda line, circuit: re.sub(r'__image_study__', self.print_img(circuit), line)
