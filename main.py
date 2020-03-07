@@ -40,11 +40,11 @@ def default_circuit_function():
 
 
 def circuit_study_with_user_input():
-    default_folder_query = input("Default location for circuits is in the data folder. If not, input the location of "
+    default_folder_query = input("Default location for circuits is in the data folder.\nIf not, input the location of "
                                  "the circuit file: ")
     file_name = input("Input the name of the circuit file: ")
 
-    accepted_types= ("tsv", "xml")
+    accepted_types = ("tsv", "xml")
     if file_name.endswith(accepted_types):
         format_ = file_name.split(".")
         format_ = format_[-1]

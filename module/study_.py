@@ -8,8 +8,8 @@ import module.path_finder as pf
 
 
 class Study:
-    def __init__(self):
-        self._velocity_of_medium = 5
+    def __init__(self, velocity=5):
+        self._velocity_of_medium = velocity
 
     @property
     def velocity_of_medium(self):
@@ -28,7 +28,10 @@ class Study:
             plt.figure(1)
             self.plot_changing_type(circuit, "efficiency", file_names[1], steps=90)
             plt.figure(2)
-            self.plot_changing_type(circuit, "height", file_names[2], start=2, stop=10, steps=9)
+            self.plot_changing_type(circuit, "height", file_names[2], start=1, stop=10, steps=9)
+        for i in range(3):
+            plt.figure(i)
+            plt.clf()
         return file_names
 
     def boolean_study(self, circuit):
@@ -42,6 +45,14 @@ class Study:
             filter_study.append(self._stepper_boolean(circuit, "Filter"))
             velocities.append(i)
         return valve_study, filter_study, velocities
+
+    def circuit_performance(self, circuit):
+        calculator = calc.CircuitCalculator(self.velocity_of_medium)
+        reynolds_number = calculator.calculate_reynolds_number(circuit)
+        heights_losses, frictions_losses, flow = calculator.calculate_core_attributes(circuit)
+        theoretical_energy = calculator.calculate_theoretical_energy_for_circuit(circuit)
+        actual_energy = calculator.calculate_actual_energy_for_circuit(circuit)
+        return reynolds_number, flow, heights_losses, frictions_losses, theoretical_energy, actual_energy
 
     # Legacy atm
     def base_study(self, circuit: cir.Circuit):  # pragma: no cover
@@ -182,24 +193,21 @@ class Study:
         list_.append(data)
 
     def plot_changing_type(self, circuit, type_, file_name, start=0.1, stop=1, steps=10):
-        label = f"Velocity = {str(self.velocity_of_medium)}[m/s]"
+        label = f"Velocity = {str(self.velocity_of_medium)} [m/s]"
         if type_ == "inside_diameter":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
-            self._plot_image_generator(x_values, y_values, f"Increasing inside diameter", "Energy consumption",
-                                       f"Study inside diameter", file_name,
-                                       label=label)
+            self._plot_image_generator(x_values, y_values, f"Increasing inside diameter [mm]"
+                                       , "Energy consumption [kW]", f"Study inside diameter", file_name, label=label)
 
         elif type_ == "efficiency":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
-            self._plot_image_generator(x_values, y_values, f"Decreasing efficiency", "Energy consumption",
-                                       f"Study efficiency", file_name,
-                                       label=label)
+            self._plot_image_generator(x_values, y_values, f"Decreasing efficiency", "Energy consumption [kW]",
+                                       f"Study efficiency", file_name, label=label)
 
         elif type_ == "height":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
-            self._plot_image_generator(x_values, y_values, f"Increasing height", "Energy consumption",
-                                       f"Study height", file_name,
-                                       label=label)
+            self._plot_image_generator(x_values, y_values, f"Increasing height [m]", "Energy consumption [kW]",
+                                       f"Study height", file_name, label=label)
 
     @staticmethod
     def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name, label=""):

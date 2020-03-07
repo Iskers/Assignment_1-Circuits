@@ -9,6 +9,7 @@ class TestHTMLSerializer(TestCase):
         self.html_serializer = pgen.HTMLSerializer()
         self.circuit = tst_cir.CircuitClassTester.example_circuit()
         self.html_creator = pgen.HTMLPageGenerator()
+        self.study = stdy.Study()
 
     def tearDown(self) -> None:
         self.html_serializer = None
@@ -19,7 +20,10 @@ class TestHTMLSerializer(TestCase):
         self.html_serializer.serialize_circuit(self.circuit)
 
     def test_serialize_circuit_attributes(self):
-        self.html_serializer.serialize_circuit_attributes(self.circuit)
+        self.html_serializer.serialize_circuit_with_attributes(self.circuit)
+
+    def test_serialize_core_attributes(self):
+        self.html_serializer.serialize_core_attributes(self.circuit, 5)
 
 
 class TestHTMLCreator(TestCase):

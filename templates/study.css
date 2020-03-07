@@ -1,8 +1,10 @@
 body {
   background-color: antiquewhite;
+  margin: 2.5%;
 }
 h1 {
   background-color: DarkBlue;
+  ;
   color: White;
   font-family: Helvetica, serif;
   font-size: 300%;

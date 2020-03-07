@@ -2,7 +2,7 @@ import re
 import num2words
 import module.file_handler as fh
 import module.path_finder as pf
-import module.study_ as study
+import module.study_ as stdy
 
 
 class HTMLSerializer:
@@ -17,7 +17,7 @@ class HTMLSerializer:
         body = self._serialize_message("ul", body)
         return title + body
 
-    def serialize_circuit_attributes(self, circuit):
+    def serialize_circuit_with_attributes(self, circuit):
         title = f"<h2>{self._sting_treatment(str(circuit))}</h2>"
         body = self._serialize_message("th", "Types: ")
         for part in circuit:
@@ -72,6 +72,22 @@ class HTMLSerializer:
         tables = serialized_valve_string + serialized_filter_string
         return title + tables
 
+    def serialize_core_attributes(self, circuit, velocity):
+        study = stdy.Study(velocity)
+        core_attributes = study.circuit_performance(circuit)
+
+        title = self._serialize_message("h3", f"Core attributes of circuit with velocity of {velocity} [m/s]")
+        body = self._serialize_message("li", f"Reynolds number = {round(core_attributes[0])}")
+        body += self._serialize_message("li", f"Flow = {round(core_attributes[1], 4)} [m3/s]")
+        body += self._serialize_message("li", f"Pressure losses due to height of circuit = {round(core_attributes[2])}"
+                                              f" [N/m2]")
+        body += self._serialize_message("li", f"Pressure losses due to frictions in parts = "
+                                              f"{round(core_attributes[3])} [N/m2]")
+        body += self._serialize_message("li", f"Theoretical energy usage of circuit = {round(core_attributes[4], 2)}"
+                                              f" [kW]")
+        body += self._serialize_message("li", f"Actual energy usage of circuit = {round(core_attributes[5], 2)} [kW]")
+        return title + self._serialize_message("ul", body)
+
     def _serialize_boolean_study(self, boolean_study, velocities, type_word, keyword: str, ):
         title = self._serialize_message("h3", f"Study of {type_word.lower()} setting at"
                                               f" different velocities")
@@ -82,7 +98,7 @@ class HTMLSerializer:
 
         serialized_valve_string = self._serialize_message("tr", serialized_valve_string)
         for i in range(len(velocities)):
-            serialized_velocity_string = self._serialize_message("td", f"Velocity = {velocities[i]}[m/s]")
+            serialized_velocity_string = self._serialize_message("td", f"Velocity = {velocities[i]} [m/s]")
             for key in boolean_study[i]:
                 serialized_velocity_string += self._serialize_message("td", boolean_study[i][key])
             serialized_valve_string += self._serialize_message("tr", serialized_velocity_string)
@@ -136,7 +152,7 @@ class HTMLSerializer:
 class HTMLPageGenerator:
     def __init__(self):
         self.serializer = HTMLSerializer()
-        self.study_ = study.Study()
+        self.study = stdy.Study()
         self.path = pf.PathFinder.get_folder_path("templates")
 
     def default_page_generation(self, circuit):
@@ -158,23 +174,26 @@ class HTMLPageGenerator:
         line = line.rstrip()
         # Methods to be called to replace placeholder in template with some value.
         # Lambda takes in two arguments and gives back string.
-        methods = {r'__Circuit__': lambda line, circuit: re.sub(r'__Circuit__',
-                                                                self.print_circuit(circuit),
-                                                                line),
+        methods = {r'__Circuit__': lambda line, circuit: re.sub(r'__Circuit__', self.print_circuit(circuit), line),
+                   r'__core_attributes__': lambda line, circuit: re.sub(r'__core_attributes__',
+                                                                        self.print_core_attributes(circuit, 5), line),
                    r'__boolean_study__': lambda line, circuit: re.sub(r'__boolean_study__',
                                                                       self.print_boolean_study(circuit), line),
-                   r'__image_study__': lambda line, circuit: re.sub(r'__image_study__',
-                                                                    self.print_img(circuit), line)}
+                   r'__image_study__': lambda line, circuit: re.sub(r'__image_study__', self.print_img(circuit), line)
+                   }
         for key in methods:
             if re.search(key, line):
                 return methods[key](line, circuit)
         return line
 
     def print_circuit(self, circuit):
-        return self.serializer.serialize_circuit_attributes(circuit)
+        return self.serializer.serialize_circuit_with_attributes(circuit)
+
+    def print_core_attributes(self, circuit, velocity):
+        return self.serializer.serialize_core_attributes(circuit, velocity)
 
     def print_img(self, circuit):
-        return self.serializer.serialize_img_study(circuit, self.study_)
+        return self.serializer.serialize_img_study(circuit, self.study)
 
     def print_boolean_study(self, circuit):
-        return self.serializer.serialize_all_boolean_studies(circuit, self.study_)
+        return self.serializer.serialize_all_boolean_studies(circuit, self.study)

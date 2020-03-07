@@ -66,7 +66,7 @@ class CircuitFormulas:
     def calculate_area(diameter: float) -> float:
         return (math.pi * diameter ** 2) / 4
 
-    # Legacy (Not in use other than testing)
+    # Used for testing
     @staticmethod
     def calculate_zeta_bend() -> float:
         return 0.1 * math.sin(math.pi / 2)
@@ -101,6 +101,15 @@ class CircuitCalculator:
     def __init__(self, velocity_of_medium: float = 5):
         self._velocity_of_medium = velocity_of_medium
 
+    def calculate_core_attributes(self, circuit: cir.Circuit):
+        area = self.circuit_formulas.calculate_area(circuit.inside_diameter)
+        reynolds_number = self.calculate_reynolds_number(circuit)
+        flow_coefficient = self.circuit_formulas.calculate_flow_coefficient(reynolds_number)
+        flow_of_seawater = self.circuit_formulas.calculate_flow(area, self._velocity_of_medium)
+        pressure_losses_from_height = self.calculate_losses_from_height(circuit)
+        pressure_losses_from_frictions = self.calculate_losses_from_frictions(circuit, flow_coefficient)
+        return pressure_losses_from_height, pressure_losses_from_frictions, flow_of_seawater
+
     def calculate_losses_from_frictions(self, circuit: cir.Circuit, flow_coefficient):
         pressure_losses_from_frictions = 0
         for part in circuit:
@@ -109,22 +118,17 @@ class CircuitCalculator:
                                                                                 , flow_coefficient)
         return pressure_losses_from_frictions
 
+    def calculate_losses_from_height(self, circuit: cir.Circuit) -> float:
+        return self.circuit_formulas.calculate_pressure_losses_from_height(circuit.height, self.GRAVITATIONAL_CONSTANT,
+                                                                           self.DENSITY_OF_SEAWATER)
+
+    def calculate_reynolds_number(self, circuit):
+        return self.circuit_formulas.calculate_reynolds_number(self._velocity_of_medium, circuit.inside_diameter
+                                                               , self.KINEMATIC_VISCOSITY_OF_SEAWATER)
+
     def calculate_theoretical_energy_for_circuit(self, circuit: cir.Circuit):
-        area = self.circuit_formulas.calculate_area(circuit.inside_diameter)
-        reynolds_number = self.circuit_formulas.calculate_reynolds_number(self._velocity_of_medium
-                                                                          , circuit.inside_diameter
-                                                                          , self.KINEMATIC_VISCOSITY_OF_SEAWATER)
-        flow_coefficient = self.circuit_formulas.calculate_flow_coefficient(reynolds_number)
-        flow_of_seawater = self.circuit_formulas.calculate_flow(area, self._velocity_of_medium)
-        pressure_losses_from_height = self.circuit_formulas.calculate_pressure_losses_from_height(circuit.height
-                                                                                   , self.GRAVITATIONAL_CONSTANT
-                                                                                   , self.DENSITY_OF_SEAWATER)
-
-        pressure_losses_from_frictions = self.calculate_losses_from_frictions(circuit, flow_coefficient)
-
-        theoretical_energy = self.circuit_formulas.calculate_theoretical_energy(pressure_losses_from_height
-                                                                                , pressure_losses_from_frictions
-                                                                                , flow_of_seawater)
+        delta_height, delta_frictions, flow = self.calculate_core_attributes(circuit)
+        theoretical_energy = self.circuit_formulas.calculate_theoretical_energy(delta_height, delta_frictions, flow)
         return theoretical_energy
 
     def calculate_actual_energy_for_circuit(self, circuit: cir.Circuit):
