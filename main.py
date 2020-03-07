@@ -9,7 +9,7 @@ parser = pars.Parser()
 page_generator = pg.HTMLPageGenerator()
 
 
-def default_circuit_function():
+def default_circuit_study():
     # Define circuit origin file.
     file_name = "task_circuit.tsv"
 
@@ -53,7 +53,8 @@ def circuit_study_with_user_input():
 
     try:
         if default_folder_query:
-            circuit = parser.parse(file_name, format_, default_folder_query)
+            file_name = default_folder_query + file_name
+            circuit = parser.parse(file_name, format_, True)
         else:
             circuit = parser.parse(file_name, format_, False)
 
@@ -73,7 +74,9 @@ def circuit_study_with_user_input():
             target_query = input("Input target file name. Press enter for default: ")
 
             if not template_query and not target_query:
-                page_generator.default_page_generation(circuit)
+                page_generator.default_page_generation(circuit, base_velocity=10, height_range=(1, 100, 90),
+                                                       efficiency_range=(0.1, 1, 90), velocity_range=(1, 10, 1),
+                                                       diameter_range=(0.1, 1, 10))
 
             elif not template_query:
                 page_generator.export_circuit_study_in_HTML(circuit, template_query, "study.html")
@@ -94,5 +97,5 @@ def circuit_study_with_user_input():
 
 
 if __name__ == '__main__':
-    default_circuit_function()
-    % circuit_study_with_user_input()
+    default_circuit_study()
+    # circuit_study_with_user_input()

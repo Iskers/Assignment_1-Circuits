@@ -162,7 +162,7 @@ class HTMLPageGenerator:
                                           diameter_range, efficiency_range, height_range)
 
     def export_circuit_study_in_HTML(self, circuit, template_file, target_file,
-                                     base_velocity=5, velocity_range=(1, 5, 1),
+                                     base_velocity=5, velocity_range=(1, 6, 1),
                                      diameter_range=(0.1, 1, 10), efficiency_range=(0.1, 1, 10),
                                      height_range=(1, 10, 9)):
         template_file = str(self.path) + "/" + template_file

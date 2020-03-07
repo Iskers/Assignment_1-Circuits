@@ -21,7 +21,7 @@ class Study:
 
     def png_generator_plot(self, circuit: cir.Circuit, velocity_range, diameter_range, efficiency_range, height_range):
         file_names = ("Inside diameter study.png", "Efficiency study.png", "Height study.png")
-        for i in range(velocity_range[0], velocity_range[1] + 1, velocity_range[2]):
+        for i in range(velocity_range[0], velocity_range[1], velocity_range[2]):
             self.velocity_of_medium = i
             plt.figure(0)
             self.plot_changing_type(circuit, "inside_diameter", file_names[0], start=diameter_range[0],

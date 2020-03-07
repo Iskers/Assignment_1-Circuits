@@ -85,6 +85,27 @@ Trailing underscores are used when naming conflicts with pythons built in functi
 File specifics
 ---------------
 
+main.py
+~~~~~~~
+This is the file to be run by regular users for analysing circuits. It is run by using one of its two functions. One is
+run purely by user input the other is run by editing the function and running it in main. Custom ranges and velocities
+can be set here as well. By altering the default function one can input custom ranges if specific velocity studies need
+to be calculated. In addition one can set ranges for the plot studies if the ranges dont fit the desired purpose.
+
+For example:
+
+.. code:: python
+
+    page_generator.default_page_generation(circuit, base_velocity=10, height_range=(1, 100, 90),
+                                                       efficiency_range=(0.1, 1, 90), velocity_range=(1, 10, 1),
+                                                       diameter_range=(0.1, 1, 10))
+
+Remember, pipes have a minimum length of 1 m. That means that the height range cant be lower than the amount of
+vertical pipes. ``velocity_range`` works is a regular for loop range, the others have a different step type. The last
+argument is the amount of steps and not the step size. ``base_velocity`` is used for calculating the core attributes.
+
+This method can also be used for ``page_generator.export_circuit_study_in_HTML()`` as they accept those same arguments.
+
 parts.py
 ~~~~~~~~
 This module contains the parts of the circuit. The ``class Part`` is abstract class for all other parts used. It
