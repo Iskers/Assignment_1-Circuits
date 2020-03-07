@@ -94,5 +94,5 @@ def circuit_study_with_user_input():
 
 
 if __name__ == '__main__':
-    #default_circuit_function()
-    circuit_study_with_user_input()
+    default_circuit_function()
+    % circuit_study_with_user_input()

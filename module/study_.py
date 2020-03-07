@@ -19,16 +19,19 @@ class Study:
     def velocity_of_medium(self, value):
         self._velocity_of_medium = value
 
-    def png_generator_plot(self, circuit: cir.Circuit, start_velocity=1, stop_velocity=5):
+    def png_generator_plot(self, circuit: cir.Circuit, velocity_range, diameter_range, efficiency_range, height_range):
         file_names = ("Inside diameter study.png", "Efficiency study.png", "Height study.png")
-        for i in range(start_velocity, stop_velocity+1):
+        for i in range(velocity_range[0], velocity_range[1] + 1, velocity_range[2]):
             self.velocity_of_medium = i
             plt.figure(0)
-            self.plot_changing_type(circuit, "inside_diameter", file_names[0])
+            self.plot_changing_type(circuit, "inside_diameter", file_names[0], start=diameter_range[0],
+                                    stop=diameter_range[1], steps=diameter_range[2])
             plt.figure(1)
-            self.plot_changing_type(circuit, "efficiency", file_names[1], steps=90)
+            self.plot_changing_type(circuit, "efficiency", file_names[1], start=efficiency_range[0],
+                                    stop=efficiency_range[1], steps=efficiency_range[2])
             plt.figure(2)
-            self.plot_changing_type(circuit, "height", file_names[2], start=1, stop=10, steps=9)
+            self.plot_changing_type(circuit, "height", file_names[2], start=height_range[0], stop=height_range[1],
+                                    steps=height_range[2])
         for i in range(3):
             plt.figure(i)
             plt.clf()
@@ -38,7 +41,7 @@ class Study:
         valve_study = []
         filter_study = []
         velocities = []
-        for i in range(1, 5+1):
+        for i in range(1, 5 + 1):
             self.velocity_of_medium = i
 
             valve_study.append(self._stepper_boolean(circuit, "Valve"))
@@ -56,7 +59,7 @@ class Study:
 
     # Legacy atm
     def base_study(self, circuit: cir.Circuit):  # pragma: no cover
-        for i in range(1, 5+1):
+        for i in range(1, 5 + 1):
             self.velocity_of_medium = i
             print(f"Study with velocity = {self.velocity_of_medium}")
             print(f"Circuit with varying efficiency: \n{self._stepper_range(circuit, 'efficiency', 1, 0.1, 10)[0]}\n")
@@ -112,16 +115,16 @@ class Study:
             # attributes_matrix = [ [1]*parts_count ] * (parts_count+1)
             # Create a matrix to represent the changed types. All should be true for first round.
             attributes_matrix = []
-            for i in range(parts_count+1):
-                attributes_matrix.append([1]*parts_count)
+            for i in range(parts_count + 1):
+                attributes_matrix.append([1] * parts_count)
             i = 1
             self._append_energy_consumption(test_circuit, energy_consumptions)
 
             # Goes through parts and sets one by one to false and appends. Also appends to attributes
             for part in test_circuit.canvas:
                 if isinstance(part, eval("cir." + type_)):
-                    for j in range(i, parts_count+1):
-                        attributes_matrix[j][i-1] = 0
+                    for j in range(i, parts_count + 1):
+                        attributes_matrix[j][i - 1] = 0
                     setattr(part, attribute, False)
                     self._append_energy_consumption(test_circuit, energy_consumptions)
                     i += 1
