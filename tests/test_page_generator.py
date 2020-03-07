@@ -43,4 +43,4 @@ class TestHTMLCreator(TestCase):
         pass
 
     def test_print_boolean_study(self):
-        self.assertIsNotNone(self.html_creator.print_boolean_study(self.circuit))
+        self.assertIsNotNone(self.html_creator._print_boolean_study(self.circuit))

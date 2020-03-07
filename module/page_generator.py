@@ -169,45 +169,45 @@ class HTMLPageGenerator:
         target_file = str(self.path) + "/" + target_file
         with fh.File(template_file, "r") as template:
             with fh.File(target_file, "w") as target:
-                self.print_report(circuit, template, target, base_velocity, velocity_range, diameter_range,
-                                  efficiency_range, height_range)
+                self._print_report(circuit, template, target, base_velocity, velocity_range, diameter_range,
+                                   efficiency_range, height_range)
 
-    def print_report(self, circuit, template_stream, target_stream, velocity, v_range, d_range,
-                     e_range, h_range):
+    def _print_report(self, circuit, template_stream, target_stream, velocity, v_range, d_range,
+                      e_range, h_range):
         for line in template_stream:
-            line = self.HTML_replacement(circuit, line, velocity, v_range, d_range,
-                                         e_range, h_range)
+            line = self._HTML_replacement(circuit, line, velocity, v_range, d_range,
+                                          e_range, h_range)
             target_stream.write(line + '\n')
 
-    def HTML_replacement(self, circuit, line: str, velocity, v_range, d_range, e_range, h_range):
+    def _HTML_replacement(self, circuit, line: str, velocity, v_range, d_range, e_range, h_range):
         line = line.rstrip()
         # Methods to be called to replace placeholder in template with some value.
         # Lambda takes in two arguments and gives back string.
-        methods = {r'__Circuit__': lambda line_, circuit_: re.sub(r'__Circuit__', self.print_circuit(circuit_),
+        methods = {r'__Circuit__': lambda line_, circuit_: re.sub(r'__Circuit__', self._print_circuit(circuit_),
                                                                   line_),
                    r'__core_attr__': lambda line_, circuit_: re.sub(r'__core_attr__',
-                                                                    self.print_core_attributes(circuit_, velocity),
+                                                                    self._print_core_attributes(circuit_, velocity),
                                                                     line_),
                    r'__boolean_study__': lambda line_, circuit_: re.sub(r'__boolean_study__',
-                                                                        self.print_boolean_study(circuit_), line_),
+                                                                        self._print_boolean_study(circuit_), line_),
                    r'__image_study__': lambda line_, circuit_: re.sub(r'__image_study__',
-                                                                      self.print_img(circuit_, v_range, d_range,
-                                                                                     e_range, h_range), line_)
+                                                                      self._print_img(circuit_, v_range, d_range,
+                                                                                      e_range, h_range), line_)
                    }
         for key in methods:
             if re.search(key, line):
                 return methods[key](line, circuit)
         return line
 
-    def print_circuit(self, circuit):
+    def _print_circuit(self, circuit):
         return self.serializer.serialize_circuit_with_attributes(circuit)
 
-    def print_core_attributes(self, circuit, velocity):
+    def _print_core_attributes(self, circuit, velocity):
         return self.serializer.serialize_core_attributes(circuit, velocity)
 
-    def print_img(self, circuit, v_range, d_range, e_range, h_range):
+    def _print_img(self, circuit, v_range, d_range, e_range, h_range):
         return self.serializer.serialize_img_study(circuit, self.study, v_range,
                                                    d_range, e_range, h_range)
 
-    def print_boolean_study(self, circuit):
+    def _print_boolean_study(self, circuit):
         return self.serializer.serialize_all_boolean_studies(circuit, self.study)

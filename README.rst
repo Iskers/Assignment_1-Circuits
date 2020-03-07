@@ -88,7 +88,9 @@ File specifics
 main.py
 ~~~~~~~
 This is the file to be run by regular users for analysing circuits. It is run by using one of its two functions. One is
-run purely by user input the other is run by editing the function and running it in main. Custom ranges and velocities
+run purely by user input the other is run by editing the function and running it in main.
+
+Custom ranges and velocities
 can be set here as well. By altering the default function one can input custom ranges if specific velocity studies need
 to be calculated. In addition one can set ranges for the plot studies if the ranges dont fit the desired purpose.
 
@@ -126,13 +128,13 @@ All sub part classes are structured with the following pattern:
 Factory functions are used by the factory methods to instance new objects which have different arguments than the
 initializer.
 
-Calculation functions are functions used by the class CircuitCalculator to calculate losses of pressure or
-return the objects specific ZETA value. While it would be preferred to contain these functions in the class
-CircuitCalculator it was simpler to add it to the parts for easy iteration.
+Calculation functions are functions used by the class ``CircuitCalculator`` to calculate losses of pressure or
+return the objects specific zeta value. While it would be preferred to contain these functions in the class
+``CircuitCalculator`` it was simpler to add it to the parts for easy iteration.
 
 circuit.py
 ~~~~~~~~~~
-Overall class representing a circuit. Canvas is the most important variable. This contains a chronological list of
+Overall class representing a circuit. ``canvas`` is its most important variable. This contains a chronological list of
 parts. Items in the canvas can be accessed through ``some_circuit[index]``.
 
 Circuit can, as previously mentioned be used in a context where one can alter it and then it reverts back when leaving
@@ -143,7 +145,10 @@ Some of a circuits properties are independent of the amount of parts in it. Such
 diameter. They can therefore be defined for the entire circuit. Additionally their setters must alter parts in the
 circuit in order to represent the circuit correctly.
 
-.. todo add section for canvascreator
+The latter half of this file contains a function and a class used to generate new Circuits with user input, but it
+ended up becoming legacy code as it was not very effective and demanded a lot of changes after refactoring the circuit
+class. I do want to include it as it is not far from usable and with more time it would be a useful feature for such a
+program.
 
 parser.py
 ~~~~~~~~~
@@ -166,14 +171,19 @@ readable. One might want to change the function names in ``CircuitFormulas`` to 
 
 study\_.py
 ~~~~~~~~~~
-This file holds the class ``Study`` which, after initialized, can be called with a study function. A study function
+This file holds the class ``Study`` which, after initialized, can be called with a study function. This class takes
+one argument and has one property, velocity. A study function
 utilizes the classes private functions to perform some studies on a circuit. A circuit should be designed and controlled
 before using these functions. If one is to create new studies they should be created as public member functions to be
 called from this class.
 
 page_generator.py
 ~~~~~~~~~~~~~~~~~
-This file is used for generating HTML reports for studies of circuits.
+This file is used for generating HTML reports for studies of circuits. It holds two classes, ``HTMLSerializer`` and
+``HTMLPageGenerator``. The first holds functions required for the latter. The latter is used in by main to generate a
+HTML study file which represents the circuit. It has two public functions which can be used, either with custom circuits
+or with the default circuit, which is *circuit.tsv* in *templates*. To simplify all HTML files and sources are in the
+same folder: *templates*.
 
 Testing
 -------
@@ -192,6 +202,9 @@ To use this feature one has to:
 Testing during this projects development is done using the packages unittest and coverage. Coverages gives the
 developer an overview of what lines of code has been run. The tests developed have tried to give 100% coverage to
 ensure that all lines have been tested and gives the expected response.
+
+Testing has also been done with coverage, and a report has been generated showing what lines have been tested and which
+have not been tested with the current method. All necessary tests have been run, but are not included in tests.
 
 Modularisation
 --------------
@@ -214,21 +227,21 @@ In an attempt to develop this project in a more realistic manner, close to a rea
 tried to use the conventions of creating a README and use `docstrings <https://www.python.org/dev/peps/pep-0257/>`_
 and `annotations <https://www.python.org/dev/peps/pep-3107/>`_.
 
+These have been used to give new developers an idea of what a function takes in and outputs. Using with an IDE which
+supports docstrings helps developers in a great deal when sorting through use of the code.
+
 Discovering these conventions during development has led to some inconsistencies in the project.
 
-.. include:: module/file_handler.py
-    :code: python
-    :start-line: 0
-    :end-line: 100
-    :literal:
 
 
 Afterthoughts
 ~~~~~~~~~~~~~
 I should have decided on some conventions in the start of the project and kept to them. Refactoring and changing
-conventions midway was very time consuming and with
+conventions midway was very time consuming and with led to a lot of issues.
 
-Consistency is key. After learning about new
+Consistency is key. When working on big projects, if one does not keep to decided standards it makes it hard to alter
+code after not using it for some time. In my case after reading about properties and factory functions, it may have
+saved me a lot of time not to adapt them until the next project.
 
 
 :Author:
@@ -236,4 +249,4 @@ Consistency is key. After learning about new
 :Version:
     1.0
 :Date created: 03.02.2020
-:Last updated: 04.03.2020
+:Last updated: 07.03.2020

@@ -54,15 +54,6 @@ class CircuitFormulasTester(unittest.TestCase):
         self.assertEqual(calc.CircuitFormulas.calculate_flow(area, velocity), area * velocity,
                          f"Should be {area * velocity}")
 
-    # TODO finish tests
-    def est_calculate_losses_of_pressure(self):
-        calculator = calc.CircuitCalculator()
-        calc.CircuitFormulas.calculate_losses_of_pressure(density_of_medium=calculator.DENSITY_OF_SEAWATER)
-        pass
-
     def test_calculate_flow_coefficient(self):
         self.assertEqual(round(calc.CircuitFormulas.calculate_flow_coefficient(2400), 4), 0.0451)
 
-
-if __name__ == '__main__':  # pragma: no cover
-    unittest.main()
