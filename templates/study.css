@@ -8,8 +8,9 @@ h1 {
   font-size: 300%;
 }
 h2 {
-  background-color: Blue;
-  color: White;
+  text-decoration: underline;
+  text-decoration-color: black;
+  color: black;
 }
 p {
   color: black;
@@ -53,7 +54,7 @@ td#property:nth-of-type(even){
 }
 
 td#item_property{
-  color: blue;
+  color: black;
   background-color: white;
 }
 td#empty_item_property{

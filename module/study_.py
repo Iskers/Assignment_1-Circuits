@@ -182,23 +182,24 @@ class Study:
         list_.append(data)
 
     def plot_changing_type(self, circuit, type_, file_name, start=0.1, stop=1, steps=10):
+        label = f"Velocity = {str(self.velocity_of_medium)}[m/s]"
         if type_ == "inside_diameter":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
             self._plot_image_generator(x_values, y_values, f"Increasing inside diameter", "Energy consumption",
                                        f"Study inside diameter", file_name,
-                                       label=f"Velocity = {str(self.velocity_of_medium)}")
+                                       label=label)
 
         elif type_ == "efficiency":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
             self._plot_image_generator(x_values, y_values, f"Decreasing efficiency", "Energy consumption",
                                        f"Study efficiency", file_name,
-                                       label=f"Velocity = {str(self.velocity_of_medium)}")
+                                       label=label)
 
         elif type_ == "height":
             y_values, x_values = self._stepper_range(circuit, type_, start, stop, steps)
             self._plot_image_generator(x_values, y_values, f"Increasing height", "Energy consumption",
                                        f"Study height", file_name,
-                                       label=f"Velocity = {str(self.velocity_of_medium)}")
+                                       label=label)
 
     @staticmethod
     def _plot_image_generator(x_values, y_values, x_label, y_label, title, file_name, label=""):

@@ -139,6 +139,9 @@ class HTMLPageGenerator:
         self.study_ = study.Study()
         self.path = pf.PathFinder.get_folder_path("templates")
 
+    def default_page_generation(self, circuit):
+        self.export_circuit_study_in_HTML(circuit, "study-template.html", "study.html")
+
     def export_circuit_study_in_HTML(self, circuit, template_file, target_file):
         template_file = str(self.path) + "/" + template_file
         target_file = str(self.path) + "/" + target_file
