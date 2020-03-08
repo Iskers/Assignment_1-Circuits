@@ -33,6 +33,7 @@ class CircuitFormulas:
 
     @staticmethod
     def calculate_flow_coefficient(reynolds_number: float) -> float:
+        # Disable reynolds warning if necessary
         if reynolds_number > 10**5:
             warnings.warn("Reynolds number exceeding 10^5")
         if reynolds_number < 2300:

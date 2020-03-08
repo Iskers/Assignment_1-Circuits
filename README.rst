@@ -167,6 +167,9 @@ used on a circuit. The second ``CircuitCalculator`` is the class used for retrie
 Modularizing the functions in such a way makes it easy to alter functions if needed and the calculator class remains
 readable. One might want to change the function names in ``CircuitFormulas`` to make it more simple and flat.
 
+The class ``CircuitFormulas`` contains a warning if the reynolds number exceeds 10^5. Remove the first if statement in
+``calculate_flow_coefficient()`` to remove the warning.
+
 study\_.py
 ~~~~~~~~~~
 This file holds the class ``Study`` which, after initialized, can be called with a study function. This class takes
