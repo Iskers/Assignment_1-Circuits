@@ -37,6 +37,8 @@ def default_circuit_study():
         # ex:
         # page_generator.default_page_generation(circuit, height_range=(2, 10, 9), velocity_range=(0.1, 2.0, 0.1))
 
+        # Se README for how to disable warning
+
         page_generator.default_page_generation(circuit, height_range=(2, 10, 9))
 
         while True:
