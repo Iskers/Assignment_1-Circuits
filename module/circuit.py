@@ -193,7 +193,6 @@ class Circuit:
         self.valve_count += 1
         return valve
 
-    # TODO Remove
     # Legacy Not in use
     def add_part_nested(self, line):  # pragma: no cover
         current_angle = 0

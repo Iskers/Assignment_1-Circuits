@@ -7,10 +7,6 @@ class CircuitClassTester(unittest.TestCase):
     Includes tests for both circuit and parts.
     """
 
-    # TODO move example_circuit here ?
-    def setUp(self) -> None:
-        pass
-
     @staticmethod
     def example_circuit() -> cir.Circuit:
         circuit = cir.Circuit()
