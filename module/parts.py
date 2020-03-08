@@ -41,7 +41,7 @@ class Part:
         object_created = globals()[object_name].initialize_with_args(*args)
         return object_created
 
-    def calculate_losses_of_pressure(self, density_of_medium: int, velocity_of_medium: int, flow_coefficient: float):
+    def calculate_losses_of_pressure(self, density_of_medium: int, velocity_of_medium, flow_coefficient: float):
         """Default calculation of losses of pressure, to be overwritten by functions with special cases.
 
         :param density_of_medium: Density of the medium where pressure is calculated.
@@ -132,7 +132,7 @@ class PipeStraight(Pipe):
             raise Exception(f"Length has to be 1 or more, tried to set to {value}")
         self._length = value
 
-    def calculate_losses_of_pressure(self, density_of_medium: int, velocity_of_medium: int, flow_coefficient: int):
+    def calculate_losses_of_pressure(self, density_of_medium: int, velocity_of_medium, flow_coefficient: int):
         return flow_coefficient * (1 / self.inside_diameter) * (density_of_medium / 2) * velocity_of_medium
 
     @classmethod

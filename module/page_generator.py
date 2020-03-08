@@ -77,8 +77,14 @@ class HTMLSerializer:
         core_attributes = study.circuit_performance(circuit)
 
         title = self._serialize_message("h3", f"Core attributes of circuit with velocity of {velocity} [m/s]")
-        body = self._serialize_message("li", f"Reynolds number = {round(core_attributes[0])}")
-        body += self._serialize_message("li", f"Flow = {round(core_attributes[1], 4)} [m3/s]")
+        warning = ""
+        if core_attributes[0] > 10**5:
+            warning = "(Reynolds number exceeding 10^5. Flow calculation may not be precise)"
+        body = self._serialize_message("li", f"Reynolds number = {round(core_attributes[0])} {warning}")
+        flow_type = "Turbulent"
+        if core_attributes[0] < 2300:
+            flow_type = "Laminar"
+        body += self._serialize_message("li", f"{flow_type} flow = {round(core_attributes[1], 4)} [m3/s]")
         body += self._serialize_message("li", f"Pressure losses due to height of circuit = {round(core_attributes[2])}"
                                               f" [N/m2]")
         body += self._serialize_message("li", f"Pressure losses due to friction in parts = "
@@ -155,7 +161,7 @@ class HTMLPageGenerator:
         self.study = stdy.Study()
         self.path = pf.PathFinder.get_folder_path("templates")
 
-    def default_page_generation(self, circuit, base_velocity=5, velocity_range=(1, 5, 1), diameter_range=(0.1, 1, 10),
+    def default_page_generation(self, circuit, base_velocity=5, velocity_range=(1, 6, 1), diameter_range=(0.1, 1, 10),
                                 efficiency_range=(0.1, 1, 10), height_range=(1, 10, 9)):
 
         self.export_circuit_study_in_HTML(circuit, "study-template.html", "study.html", base_velocity, velocity_range,

@@ -13,9 +13,16 @@ def default_circuit_study():
     # Define circuit origin file.
     file_name = "task_circuit.tsv"
 
+    format_ = file_name.split(".")
+    format_ = format_[-1]
+
     # Create circuit class instance
     # The parse function takes in file format and
-    circuit = parser.parse(file_name, "tsv", False)
+    circuit = parser.parse(file_name, format_, False)
+
+    # You can change circuit attributes here before the check
+    # ex:
+    # circuit.inside_diameter = 0.1
 
     try:
         circ.CircuitControl.control_circuit(circuit)
@@ -25,7 +32,12 @@ def default_circuit_study():
 
     else:
         # Generate page with default template and store_location
-        page_generator.default_page_generation(circuit)
+        # Set the height range if your circuit has more than one vertical pipe.
+
+        # ex:
+        # page_generator.default_page_generation(circuit, height_range=(2, 10, 9), velocity_range=(0.1, 2.0, 0.1))
+
+        page_generator.default_page_generation(circuit, height_range=(2, 10, 9))
 
         while True:
             open_file_query = input("Do you want to open the study?[y / n]")

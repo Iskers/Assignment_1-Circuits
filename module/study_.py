@@ -21,7 +21,7 @@ class Study:
 
     def png_generator_plot(self, circuit: cir.Circuit, velocity_range, diameter_range, efficiency_range, height_range):
         file_names = ("Inside diameter study.png", "Efficiency study.png", "Height study.png")
-        for i in range(velocity_range[0], velocity_range[1], velocity_range[2]):
+        for i in np.arange(velocity_range[0], velocity_range[1], velocity_range[2]):
             self.velocity_of_medium = i
             plt.figure(0)
             self.plot_changing_type(circuit, "inside_diameter", file_names[0], start=diameter_range[0],
@@ -152,7 +152,7 @@ class Study:
             for part in circuit.canvas:
                 if isinstance(part, cir.PipeStraight):
                     if part.angle > 0:
-                        if part.length < delta:
+                        if part.length <= delta:
                             length_allowed_to_remove = part.length - 1
                             part.length -= length_allowed_to_remove
                             delta -= length_allowed_to_remove
@@ -160,7 +160,8 @@ class Study:
                             part.length -= delta
                             circuit.height = None
                             return circuit.height
-            raise Exception(f"Not allowed to remove {height} from {circuit}")
+            raise Exception(f"Not allowed to set height of {circuit} to {height}. Height of circuit must be the sum"
+                            f" of vertical pipes.")
 
         elif circuit.height < height:
             pipe = cir.PipeStraight("Added_pipe", circuit.inside_diameter, delta, 90)

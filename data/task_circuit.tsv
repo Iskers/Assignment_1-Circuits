@@ -8,7 +8,7 @@ pipe	P3	2.50	0.80	0.00
 filter	F	1.00
 pipe	P4	2.50	0.80	0.00
 bend	B1	0.80
-pipe	P5e	1.50	0.80	90.00
+pipe	P5	1.50	0.80	90.00
 valve	V	1.00
 pipe	P6	3.50	0.80	90.00
 bend	B2	0.80

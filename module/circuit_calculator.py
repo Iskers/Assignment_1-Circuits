@@ -1,4 +1,5 @@
 import math
+import warnings
 import module.circuit as cir
 
 
@@ -32,6 +33,8 @@ class CircuitFormulas:
 
     @staticmethod
     def calculate_flow_coefficient(reynolds_number: float) -> float:
+        if reynolds_number > 10**5:
+            warnings.warn("Reynolds number exceeding 10^5")
         if reynolds_number < 2300:
             return 64 / reynolds_number
         else:
@@ -106,8 +109,9 @@ class CircuitCalculator:
                                                                            self.DENSITY_OF_SEAWATER)
 
     def calculate_reynolds_number(self, circuit):
-        return self.circuit_formulas.calculate_reynolds_number(self._velocity_of_medium, circuit.inside_diameter
-                                                               , self.KINEMATIC_VISCOSITY_OF_SEAWATER)
+        return self.circuit_formulas.calculate_reynolds_number(self._velocity_of_medium,
+                                                                circuit.inside_diameter,
+                                                                self.KINEMATIC_VISCOSITY_OF_SEAWATER)
 
     def calculate_theoretical_energy_for_circuit(self, circuit: cir.Circuit):
         delta_height, delta_frictions, flow = self.calculate_core_attributes(circuit)

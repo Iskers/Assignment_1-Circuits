@@ -8,7 +8,7 @@ Pumping circuits is a program which provides design, troubleshooting and analysi
 
 Getting Started
 ===============
-This Python program requires at least python 3.7.
+This Python program requires at least python 3.5.
 
 Features
 --------
@@ -22,13 +22,13 @@ Features
 * Calculate the energy consumption for these circuits
 * HTML study generation with adaptability for different use cases
 * Validate circuits validity in a 2D-plane
-* Testing with near 100% coverage
+* Testing with near 100% line coverage
 
 Assumptions
 ------------
 * Pipes can have a length of no shorter than 1 m. To change this change set function for PipeStraight.
 * While the program requires pipes with the angles 0 and 90,
-  it is possible to adapt for pipes with angles between requires only small changes.
+  it is possible to adapt for pipes with angles between with some adaptations.
 
 
 Usage
@@ -55,8 +55,6 @@ This program tries to conform to several "good practises" following the followin
 
 Because these where applied some time into the development of this program, and the resource cost of
 refactoring one might find parts that do not adhere to these principles.
-
-Most big functionality, which is not private should be documented in their docstrings.
 
 General conventions
 --------------------
@@ -92,7 +90,7 @@ run purely by user input the other is run by editing the function and running it
 
 Custom ranges and velocities
 can be set here as well. By altering the default function one can input custom ranges if specific velocity studies need
-to be calculated. In addition one can set ranges for the plot studies if the ranges dont fit the desired purpose.
+to be calculated. In addition one can set ranges for the plot-studies if the ranges dont fit the desired purpose.
 
 For example:
 
@@ -102,7 +100,7 @@ For example:
                                                        efficiency_range=(0.1, 1, 90), velocity_range=(1, 10, 1),
                                                        diameter_range=(0.1, 1, 10))
 
-Remember, pipes have a minimum length of 1 m. That means that the height range cant be lower than the amount of
+Remember, pipes have a minimum length of 1 m. This means that the height range cant be lower than the amount of
 vertical pipes. ``velocity_range`` works is a regular for loop range, the others have a different step type. The last
 argument is the amount of steps and not the step size. ``base_velocity`` is used for calculating the core attributes.
 
@@ -110,8 +108,8 @@ This method can also be used for ``page_generator.export_circuit_study_in_HTML()
 
 parts.py
 ~~~~~~~~
-This module contains the parts of the circuit. The ``class Part`` is abstract class for all other parts used. It
-contains a name which is a property shared by all parts, used with ``Part.name``.
+This module contains the parts of the circuit. The class ``Part`` is abstract class for all other parts used. It
+contains a name which is a property shared by all parts, accessed with ``Part.name``.
 
 It also contains two different
 `factory methods <https://en.wikipedia.org/wiki/Factory_(object-oriented_programming)>`_, which use arguments or
@@ -134,10 +132,10 @@ return the objects specific zeta value. While it would be preferred to contain t
 
 circuit.py
 ~~~~~~~~~~
-Overall class representing a circuit. ``canvas`` is its most important variable. This contains a chronological list of
+Overall class representing a circuit. ``canvas`` is its central variable. This contains a chronological list of
 parts. Items in the canvas can be accessed through ``some_circuit[index]``.
 
-Circuit can, as previously mentioned be used in a context where one can alter it and then it reverts back when leaving
+Circuit can, as previously mentioned, be used in a context where one can alter it and then it reverts back when leaving
 the context. This is useful in *study_.py* because here we want to alter a circuit do some studies and then return
 the original for final alterations.
 
@@ -154,7 +152,7 @@ parser.py
 ~~~~~~~~~
 This file contains parser class which can be used for parsing different file types. It should be used by calling
 its member function ``parse`` which uses *file_handler.py* and *path_finder.py* as well as the package ElementTree to
-parse both tsv and xml formats.
+parse tsv, csv and xml formats.
 
 circuit_control.py
 ~~~~~~~~~~~~~~~~~~
@@ -201,7 +199,7 @@ To use this feature one has to:
 
 Testing during this projects development is done using, as mentioned earlier, the packages **unittest** as well as
 **coverage**. Coverages gives the developer an overview of what lines of code has been run. The tests developed have
-tried to give 100% coverage to ensure that all lines have been tested and gives the expected response.
+tried to provide 100% line coverage to ensure that all lines have been tested and gives the expected response.
 
 Testing has also been done with coverage, and a report has been generated showing what lines have been tested and which
 have not been tested with the current method. All necessary tests have been run, but are not included in tests.

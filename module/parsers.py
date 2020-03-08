@@ -48,6 +48,9 @@ class Parser:
                 return self._tsv_parser(file_source, circuit)
             elif format_ == "xml":
                 return self._xml_parser(file_source, circuit)
+            elif format_ == "csv":
+                self.separator = ","
+                return self._tsv_parser(file_source, circuit)
             else:
                 raise Exception("Invalid format")
 
